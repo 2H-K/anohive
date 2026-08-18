@@ -1,8 +1,8 @@
-# Pulse Runbook
+# AnoHive Runbook
 
 ## Overview
 
-Pulse is a real-time log aggregation and anomaly detection system. This runbook covers common operational procedures, troubleshooting, and maintenance tasks.
+AnoHive is a real-time log aggregation and anomaly detection system. This runbook covers common operational procedures, troubleshooting, and maintenance tasks.
 
 ## Table of Contents
 
@@ -50,7 +50,7 @@ Log Sources → Collector → Parser → Detector → Storage
 docker-compose up -d
 
 # View logs
-docker-compose logs -f pulse
+docker-compose logs -f anohive
 
 # Scale collector (optional)
 docker-compose --profile collector up -d
@@ -63,11 +63,11 @@ docker-compose --profile collector up -d
 kubectl apply -k deployments/kubernetes/
 
 # Check deployment status
-kubectl -n pulse-monitoring get pods
-kubectl -n pulse-monitoring logs -f deployment/pulse
+kubectl -n anohive get pods
+kubectl -n anohive logs -f deployment/anohive
 
 # Port forward for local access
-kubectl -n pulse-monitoring port-forward svc/pulse 8080:80
+kubectl -n anohive port-forward svc/anohive 8080:80
 ```
 
 ### Environment Variables
@@ -76,10 +76,10 @@ kubectl -n pulse-monitoring port-forward svc/pulse 8080:80
 |----------|---------|-------------|
 | `PULSE_HOST` | `0.0.0.0` | Server bind address |
 | `PULSE_PORT` | `8080` | Server port |
-| `PULSE_DB_PATH` | `pulse.db` | SQLite database path |
+| `ANOIVE_DB_PATH` | `anohive.db` | SQLite database path |
 | `PULSE_RETENTION_HOURS` | `168` | Log retention in hours (7 days) |
 | `PULSE_MAX_LOGS` | `1000000` | Maximum number of logs to retain |
-| `PULSE_API_KEY` | `pulse-dev-key-2024` | API key for authentication |
+| `ANOIVE_API_KEY` | `anohive-dev-key-2024` | API key for authentication |
 | `PULSE_LOG_LEVEL` | `info` | Log level (debug/info/warn/error) |
 | `PULSE_LOG_FORMAT` | `text` | Log format (text/json) |
 | `PULSE_ALLOWED_ORIGINS` | `*` | Allowed CORS origins |
@@ -96,7 +96,7 @@ kubectl -n pulse-monitoring port-forward svc/pulse 8080:80
 
 ### Configuration File
 
-Pulse supports JSON configuration files:
+AnoHive supports JSON configuration files:
 
 ```json
 {
@@ -108,7 +108,7 @@ Pulse supports JSON configuration files:
     "graceful_timeout_seconds": 30
   },
   "storage": {
-    "db_path": "/var/lib/pulse/data/pulse.db",
+    "db_path": "/var/lib/anohive/data/anohive.db",
     "retention": "7d",
     "max_logs": 1000000,
     "cleanup_interval_seconds": 3600
@@ -216,7 +216,7 @@ JSON format metrics at `GET /api/metrics/json`.
 
 **Resolution**:
 1. Check database file permissions
-2. Verify disk space: `df -h /var/lib/pulse/data`
+2. Verify disk space: `df -h /var/lib/anohive/data`
 3. Check for database corruption: `PRAGMA integrity_check`
 4. Restart server if needed
 
@@ -246,25 +246,25 @@ JSON format metrics at `GET /api/metrics/json`.
 
 ```bash
 # Using CLI tool
-pulse backup -db /var/lib/pulse/data/pulse.db -output /backup/pulse-$(date +%Y%m%d).db
+anohive backup -db /var/lib/anohive/data/anohive.db -output /backup/anohive-$(date +%Y%m%d).db
 
 # Using SQLite directly
-sqlite3 /var/lib/pulse/data/pulse.db "VACUUM INTO '/backup/pulse-backup.db'"
+sqlite3 /var/lib/anohive/data/anohive.db "VACUUM INTO '/backup/anohive-backup.db'"
 ```
 
 ### Database Restore
 
 ```bash
 # Using CLI tool
-pulse restore -db /var/lib/pulse/data/pulse.db -input /backup/pulse-backup.db
+anohive restore -db /var/lib/anohive/data/anohive.db -input /backup/anohive-backup.db
 
 # Manual restore
-cp /backup/pulse-backup.db /var/lib/pulse/data/pulse.db
+cp /backup/anohive-backup.db /var/lib/anohive/data/anohive.db
 ```
 
 ### Log Rotation
 
-Pulse automatically cleans up logs based on retention policy. Manual cleanup:
+AnoHive automatically cleans up logs based on retention policy. Manual cleanup:
 
 ```bash
 # Force cleanup by reducing retention
@@ -280,7 +280,7 @@ curl -X POST -H "X-API-Key: ..." http://localhost:8080/api/config/reload
 To reclaim disk space after large deletions:
 
 ```bash
-sqlite3 /var/lib/pulse/data/pulse.db "VACUUM"
+sqlite3 /var/lib/anohive/data/anohive.db "VACUUM"
 ```
 
 ## Disaster Recovery
@@ -293,12 +293,12 @@ sqlite3 /var/lib/pulse/data/pulse.db "VACUUM"
 
 Example cron job:
 ```bash
-0 2 * * * /usr/local/bin/pulse backup -db /var/lib/pulse/data/pulse.db -output /backup/pulse-$(date +\%Y\%m\%d).db
+0 2 * * * /usr/local/bin/anohive backup -db /var/lib/anohive/data/anohive.db -output /backup/anohive-$(date +\%Y\%m\%d).db
 ```
 
 ### Recovery Procedure
 
-1. Stop the pulse service
+1. Stop the anohive service
 2. Restore from backup
 3. Verify data integrity
 4. Start the service
@@ -306,17 +306,17 @@ Example cron job:
 
 ```bash
 # Stop service
-kubectl rollout pause deployment/pulse -n pulse-monitoring
+kubectl rollout pause deployment/anohive -n anohive
 # or
-docker-compose stop pulse
+docker-compose stop anohive
 
 # Restore backup
-pulse restore -db /var/lib/pulse/data/pulse.db -input /backup/pulse-latest.db
+anohive restore -db /var/lib/anohive/data/anohive.db -input /backup/anohive-latest.db
 
 # Start service
-kubectl rollout resume deployment/pulse -n pulse-monitoring
+kubectl rollout resume deployment/anohive -n anohive
 # or
-docker-compose start pulse
+docker-compose start anohive
 
 # Verify
 curl http://localhost:8080/api/health

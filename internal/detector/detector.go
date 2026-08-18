@@ -8,7 +8,7 @@ import (
 	"sync"
 	"time"
 
-	"github.com/2H-K/pulse/internal/models"
+	"github.com/2H-K/anohive/internal/models"
 )
 
 type Detector struct {

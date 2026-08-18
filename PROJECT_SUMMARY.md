@@ -1,8 +1,8 @@
-# Pulse 项目开发总结
+# AnoHive 项目开发总结
 
 ## 项目概述
 
-Pulse 是一个高性能实时日志聚合与异常检测系统，从架构设计到完整实现耗时约 2 小时完成。
+AnoHive 是一个高性能实时日志聚合与异常检测系统，从架构设计到完整实现耗时约 2 小时完成。
 
 ## 技术栈
 
@@ -14,7 +14,7 @@ Pulse 是一个高性能实时日志聚合与异常检测系统，从架构设�
 ## 项目结构
 
 ```
-pulse/ (总计 ~5000 行代码)
+anohive/ (总计 ~5000 行代码)
 ├── cmd/                  # 入口程序
 │   ├── server/          # HTTP 服务器 (207 行)
 │   └── cli/             # CLI 工具 (475 行)
@@ -133,7 +133,7 @@ pulse/ (总计 ~5000 行代码)
 
 ```bash
 # 构建
-cd pulse && make build
+cd anohive && make build
 
 # 启动服务器
 ./build/pulse -port 8080
@@ -144,8 +144,8 @@ curl -X POST http://localhost:8080/api/logs/ingest \
   -d '{"source": "myapp", "entries": [{"level": "ERROR", "message": "test"}]}'
 
 # 使用 CLI
-./build/pulse-cli health
-./build/pulse-cli logs --level ERROR
+./build/anohive-cli health
+./build/anohive-cli logs --level ERROR
 
 # 运行测试
 make test

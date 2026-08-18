@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: pulse
-  namespace: pulse-monitoring
+  name: anohive
+  namespace: anohiveing
   labels:
-    app: pulse
+    app: anohive
 spec:
   type: ClusterIP
   ports:
@@ -13,32 +13,32 @@ spec:
       protocol: TCP
       name: http
   selector:
-    app: pulse
+    app: anohive
     component: monitor
 ---
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: pulse
-  namespace: pulse-monitoring
+  name: anohive
+  namespace: anohiveing
   labels:
-    app: pulse
+    app: anohive
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
     nginx.ingress.kubernetes.io/proxy-body-size: "10m"
     nginx.ingress.kubernetes.io/proxy-read-timeout: "3600"
     nginx.ingress.kubernetes.io/proxy-send-timeout: "3600"
-    nginx.ingress.kubernetes.io/websocket-services: "pulse"
+    nginx.ingress.kubernetes.io/websocket-services: "anohive"
 spec:
   ingressClassName: nginx
   rules:
-    - host: pulse.example.com
+    - host: anohive.example.com
       http:
         paths:
           - path: /
             pathType: Prefix
             backend:
               service:
-                name: pulse
+                name: anohive
                 port:
                   number: 80

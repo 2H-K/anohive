@@ -61,49 +61,49 @@ func (m *Metrics) HandleMetrics(w http.ResponseWriter, r *http.Request) {
 
 	w.Header().Set("Content-Type", "text/plain; version=0.0.4; charset=utf-8")
 
-	fmt.Fprintf(w, "# HELP pulse_uptime_seconds Total uptime in seconds\n")
-	fmt.Fprintf(w, "# TYPE pulse_uptime_seconds counter\n")
-	fmt.Fprintf(w, "pulse_uptime_seconds %.2f\n", uptime)
+	fmt.Fprintf(w, "# HELP anohive_uptime_seconds Total uptime in seconds\n")
+	fmt.Fprintf(w, "# TYPE anohive_uptime_seconds counter\n")
+	fmt.Fprintf(w, "anohive_uptime_seconds %.2f\n", uptime)
 
-	fmt.Fprintf(w, "# HELP pulse_requests_total Total number of HTTP requests\n")
-	fmt.Fprintf(w, "# TYPE pulse_requests_total counter\n")
-	fmt.Fprintf(w, "pulse_requests_total %d\n", atomic.LoadInt64(&m.totalRequests))
+	fmt.Fprintf(w, "# HELP anohive_requests_total Total number of HTTP requests\n")
+	fmt.Fprintf(w, "# TYPE anohive_requests_total counter\n")
+	fmt.Fprintf(w, "anohive_requests_total %d\n", atomic.LoadInt64(&m.totalRequests))
 
-	fmt.Fprintf(w, "# HELP pulse_logs_ingested_total Total number of logs ingested\n")
-	fmt.Fprintf(w, "# TYPE pulse_logs_ingested_total counter\n")
-	fmt.Fprintf(w, "pulse_logs_ingested_total %d\n", atomic.LoadInt64(&m.totalLogs))
+	fmt.Fprintf(w, "# HELP anohive_logs_ingested_total Total number of logs ingested\n")
+	fmt.Fprintf(w, "# TYPE anohive_logs_ingested_total counter\n")
+	fmt.Fprintf(w, "anohive_logs_ingested_total %d\n", atomic.LoadInt64(&m.totalLogs))
 
-	fmt.Fprintf(w, "# HELP pulse_anomalies_detected_total Total number of anomalies detected\n")
-	fmt.Fprintf(w, "# TYPE pulse_anomalies_detected_total counter\n")
-	fmt.Fprintf(w, "pulse_anomalies_detected_total %d\n", atomic.LoadInt64(&m.totalAnomalies))
+	fmt.Fprintf(w, "# HELP anohive_anomalies_detected_total Total number of anomalies detected\n")
+	fmt.Fprintf(w, "# TYPE anohive_anomalies_detected_total counter\n")
+	fmt.Fprintf(w, "anohive_anomalies_detected_total %d\n", atomic.LoadInt64(&m.totalAnomalies))
 
-	fmt.Fprintf(w, "# HELP pulse_active_websocket_clients Number of active WebSocket clients\n")
-	fmt.Fprintf(w, "# TYPE pulse_active_websocket_clients gauge\n")
-	fmt.Fprintf(w, "pulse_active_websocket_clients %d\n", atomic.LoadInt64(&m.activeClients))
+	fmt.Fprintf(w, "# HELP anohive_active_websocket_clients Number of active WebSocket clients\n")
+	fmt.Fprintf(w, "# TYPE anohive_active_websocket_clients gauge\n")
+	fmt.Fprintf(w, "anohive_active_websocket_clients %d\n", atomic.LoadInt64(&m.activeClients))
 
-	fmt.Fprintf(w, "# HELP pulse_bytes_received_total Total bytes received\n")
-	fmt.Fprintf(w, "# TYPE pulse_bytes_received_total counter\n")
-	fmt.Fprintf(w, "pulse_bytes_received_total %d\n", atomic.LoadInt64(&m.bytesReceived))
+	fmt.Fprintf(w, "# HELP anohive_bytes_received_total Total bytes received\n")
+	fmt.Fprintf(w, "# TYPE anohive_bytes_received_total counter\n")
+	fmt.Fprintf(w, "anohive_bytes_received_total %d\n", atomic.LoadInt64(&m.bytesReceived))
 
-	fmt.Fprintf(w, "# HELP pulse_bytes_sent_total Total bytes sent\n")
-	fmt.Fprintf(w, "# TYPE pulse_bytes_sent_total counter\n")
-	fmt.Fprintf(w, "pulse_bytes_sent_total %d\n", atomic.LoadInt64(&m.bytesSent))
+	fmt.Fprintf(w, "# HELP anohive_bytes_sent_total Total bytes sent\n")
+	fmt.Fprintf(w, "# TYPE anohive_bytes_sent_total counter\n")
+	fmt.Fprintf(w, "anohive_bytes_sent_total %d\n", atomic.LoadInt64(&m.bytesSent))
 
-	fmt.Fprintf(w, "# HELP pulse_memory_alloc_bytes Current memory allocation in bytes\n")
-	fmt.Fprintf(w, "# TYPE pulse_memory_alloc_bytes gauge\n")
-	fmt.Fprintf(w, "pulse_memory_alloc_bytes %d\n", memStats.Alloc)
+	fmt.Fprintf(w, "# HELP anohive_memory_alloc_bytes Current memory allocation in bytes\n")
+	fmt.Fprintf(w, "# TYPE anohive_memory_alloc_bytes gauge\n")
+	fmt.Fprintf(w, "anohive_memory_alloc_bytes %d\n", memStats.Alloc)
 
-	fmt.Fprintf(w, "# HELP pulse_memory_sys_bytes Total memory obtained from OS\n")
-	fmt.Fprintf(w, "# TYPE pulse_memory_sys_bytes gauge\n")
-	fmt.Fprintf(w, "pulse_memory_sys_bytes %d\n", memStats.Sys)
+	fmt.Fprintf(w, "# HELP anohive_memory_sys_bytes Total memory obtained from OS\n")
+	fmt.Fprintf(w, "# TYPE anohive_memory_sys_bytes gauge\n")
+	fmt.Fprintf(w, "anohive_memory_sys_bytes %d\n", memStats.Sys)
 
-	fmt.Fprintf(w, "# HELP pulse_gc_runs_total Total number of GC runs\n")
-	fmt.Fprintf(w, "# TYPE pulse_gc_runs_total counter\n")
-	fmt.Fprintf(w, "pulse_gc_runs_total %d\n", memStats.NumGC)
+	fmt.Fprintf(w, "# HELP anohive_gc_runs_total Total number of GC runs\n")
+	fmt.Fprintf(w, "# TYPE anohive_gc_runs_total counter\n")
+	fmt.Fprintf(w, "anohive_gc_runs_total %d\n", memStats.NumGC)
 
-	fmt.Fprintf(w, "# HELP pulse_goroutines Current number of goroutines\n")
-	fmt.Fprintf(w, "# TYPE pulse_goroutines gauge\n")
-	fmt.Fprintf(w, "pulse_goroutines %d\n", runtime.NumGoroutine())
+	fmt.Fprintf(w, "# HELP anohive_goroutines Current number of goroutines\n")
+	fmt.Fprintf(w, "# TYPE anohive_goroutines gauge\n")
+	fmt.Fprintf(w, "anohive_goroutines %d\n", runtime.NumGoroutine())
 }
 
 func (m *Metrics) HandleMetricsJSON(w http.ResponseWriter, r *http.Request) {

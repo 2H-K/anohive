@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"github.com/2H-K/pulse/internal/models"
+	"github.com/2H-K/anohive/internal/models"
 
 	_ "github.com/mattn/go-sqlite3"
 )

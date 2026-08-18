@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: pulse-config
-  namespace: pulse-monitoring
+  name: anohive-config
+  namespace: anohiveing
   labels:
-    app: pulse
+    app: anohive
 data:
   PULSE_HOST: "0.0.0.0"
   PULSE_PORT: "8080"
@@ -25,10 +25,10 @@ data:
 apiVersion: v1
 kind: Secret
 metadata:
-  name: pulse-secrets
-  namespace: pulse-monitoring
+  name: anohive-secrets
+  namespace: anohiveing
   labels:
-    app: pulse
+    app: anohive
 type: Opaque
 stringData:
   PULSE_API_KEY: "change-me-in-production"

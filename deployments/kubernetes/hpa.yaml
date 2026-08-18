@@ -1,29 +1,29 @@
 apiVersion: policy/v1
 kind: PodDisruptionBudget
 metadata:
-  name: pulse
-  namespace: pulse-monitoring
+  name: anohive
+  namespace: anohiveing
   labels:
-    app: pulse
+    app: anohive
 spec:
   minAvailable: 1
   selector:
     matchLabels:
-      app: pulse
+      app: anohive
       component: monitor
 ---
 apiVersion: autoscaling/v2
 kind: HorizontalPodAutoscaler
 metadata:
-  name: pulse
-  namespace: pulse-monitoring
+  name: anohive
+  namespace: anohiveing
   labels:
-    app: pulse
+    app: anohive
 spec:
   scaleTargetRef:
     apiVersion: apps/v1
     kind: Deployment
-    name: pulse
+    name: anohive
   minReplicas: 1
   maxReplicas: 3
   metrics:

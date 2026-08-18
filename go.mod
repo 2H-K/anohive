@@ -1,4 +1,4 @@
-module github.com/2H-K/pulse
+module github.com/2H-K/anohive
 
 go 1.25
 

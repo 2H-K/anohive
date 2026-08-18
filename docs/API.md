@@ -1,4 +1,4 @@
-# Pulse API Documentation
+# AnoHive API Documentation
 
 ## Base URL
 
@@ -295,21 +295,21 @@ Prometheus-format metrics.
 
 **Response:**
 ```
-# HELP pulse_logs_total Total number of logs ingested
-# TYPE pulse_logs_total counter
-pulse_logs_total 10000
+# HELP anohive_logs_total Total number of logs ingested
+# TYPE anohive_logs_total counter
+anohive_logs_total 10000
 
-# HELP pulse_anomalies_total Total number of anomalies detected
-# TYPE pulse_anomalies_total counter
-pulse_anomalies_total 15
+# HELP anohive_anomalies_total Total number of anomalies detected
+# TYPE anohive_anomalies_total counter
+anohive_anomalies_total 15
 
-# HELP pulse_requests_total Total API requests
-# TYPE pulse_requests_total counter
-pulse_requests_total 5000
+# HELP anohive_requests_total Total API requests
+# TYPE anohive_requests_total counter
+anohive_requests_total 5000
 
-# HELP pulse_websocket_clients Current WebSocket clients
-# TYPE pulse_websocket_clients gauge
-pulse_websocket_clients 5
+# HELP anohive_websocket_clients Current WebSocket clients
+# TYPE anohive_websocket_clients gauge
+anohive_websocket_clients 5
 ```
 
 #### GET /api/metrics/json

@@ -3,7 +3,7 @@ package parser
 import (
 	"testing"
 
-	"github.com/2H-K/pulse/internal/models"
+	"github.com/2H-K/anohive/internal/models"
 )
 
 func TestParseDocker(t *testing.T) {

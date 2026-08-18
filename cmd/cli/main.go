@@ -92,7 +92,7 @@ func (c *CLI) cmdStatus(args []string) {
 	var result map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&result)
 
-	fmt.Printf("Pulse Server Status\n")
+	fmt.Printf("AnoHive Server Status\n")
 	fmt.Printf("==================\n")
 	fmt.Printf("Status:    %s\n", result["status"])
 	fmt.Printf("Uptime:    %s\n", result["uptime"])
@@ -203,8 +203,8 @@ func (c *CLI) cmdIngest(args []string) {
 	} else {
 		fs.Args()
 		if len(fs.Args()) == 0 {
-			fmt.Fprintln(os.Stderr, "Usage: pulse ingest [options] <message>")
-			fmt.Fprintln(os.Stderr, "   or: pulse ingest [options] -file <path>")
+			fmt.Fprintln(os.Stderr, "Usage: anohive ingest [options] <message>")
+			fmt.Fprintln(os.Stderr, "   or: anohive ingest [options] -file <path>")
 			os.Exit(1)
 		}
 		entries = append(entries, map[string]interface{}{
@@ -286,7 +286,7 @@ func (c *CLI) cmdStats(args []string) {
 	var stats map[string]interface{}
 	json.NewDecoder(resp.Body).Decode(&stats)
 
-	fmt.Printf("Pulse Statistics\n")
+	fmt.Printf("AnoHive Statistics\n")
 	fmt.Println(strings.Repeat("=", 40))
 	fmt.Printf("Uptime:          %s\n", stats["uptime"])
 	fmt.Printf("Total Sources:   %.0f\n", stats["total_sources"])
@@ -372,7 +372,7 @@ func (c *CLI) cmdStream(args []string) {
 
 func (c *CLI) cmdConfig(args []string) {
 	if len(args) < 2 {
-		fmt.Println("Usage: pulse config <key> <value>")
+		fmt.Println("Usage: anohive config <key> <value>")
 		fmt.Println("  error_rate <float>   - Error rate threshold (0.0-1.0)")
 		fmt.Println("  rate_multiplier <float> - Rate change multiplier")
 		fmt.Println("  burst <int>          - Burst detection threshold")
@@ -427,7 +427,7 @@ func (c *CLI) cmdBackup(args []string) {
 	fs.Parse(args)
 
 	if outputPath == "" {
-		fmt.Fprintln(os.Stderr, "Usage: pulse backup -output <path> [-db <path>]")
+		fmt.Fprintln(os.Stderr, "Usage: anohive backup -output <path> [-db <path>]")
 		fmt.Fprintln(os.Stderr, "  -output string   Output backup file path (required)")
 		fmt.Fprintln(os.Stderr, "  -db string       Database path (if not using server)")
 		os.Exit(1)
@@ -454,7 +454,7 @@ func (c *CLI) cmdBackup(args []string) {
 	resp.Body.Close()
 
 	fmt.Println("Server-based backup not yet implemented")
-	fmt.Println("Use: pulse backup -db <path> -output <backup_path>")
+	fmt.Println("Use: anohive backup -db <path> -output <backup_path>")
 }
 
 func (c *CLI) cmdRestore(args []string) {
@@ -469,7 +469,7 @@ func (c *CLI) cmdRestore(args []string) {
 	fs.Parse(args)
 
 	if backupPath == "" {
-		fmt.Fprintln(os.Stderr, "Usage: pulse restore -input <path> [-db <path>]")
+		fmt.Fprintln(os.Stderr, "Usage: anohive restore -input <path> [-db <path>]")
 		fmt.Fprintln(os.Stderr, "  -input string    Backup file path (required)")
 		fmt.Fprintln(os.Stderr, "  -db string       Database path (if not using server)")
 		os.Exit(1)
@@ -487,7 +487,7 @@ func (c *CLI) cmdRestore(args []string) {
 	}
 
 	fmt.Println("Server-based restore not yet implemented")
-	fmt.Println("Use: pulse restore -db <path> -input <backup_path>")
+	fmt.Println("Use: anohive restore -db <path> -input <backup_path>")
 }
 
 func backupDatabase(dbPath, backupPath string) error {
@@ -523,9 +523,9 @@ func restoreDatabase(backupPath, dbPath string) error {
 }
 
 func printUsage() {
-	fmt.Print(`Pulse CLI - Real-time Log Monitor
+	fmt.Print(`AnoHive CLI - Real-time Log Monitor
 
-Usage: pulse <command> [options]
+Usage: anohive <command> [options]
 
 Commands:
    health              Check server status
@@ -543,13 +543,13 @@ Environment Variables:
    PULSE_URL           Server URL (default: http://localhost:8080)
 
 Examples:
-   pulse health
-   pulse logs --level ERROR --limit 10
-   pulse ingest --level ERROR "Something went wrong"
-   pulse anomalies --severity CRITICAL
-   pulse stream
-   pulse backup -db /var/lib/pulse/data/pulse.db -output /tmp/pulse-backup.db
-   pulse restore -db /var/lib/pulse/data/pulse.db -input /tmp/pulse-backup.db`)
+   anohive health
+   anohive logs --level ERROR --limit 10
+   anohive ingest --level ERROR "Something went wrong"
+   anohive anomalies --severity CRITICAL
+   anohive stream
+   anohive backup -db /var/lib/anohive/data/anohive.db -output /tmp/anohive-backup.db
+   anohive restore -db /var/lib/anohive/data/anohive.db -input /tmp/anohive-backup.db`)
 }
 
 func levelColorCode(level string) string {

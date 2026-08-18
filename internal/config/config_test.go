@@ -15,8 +15,8 @@ func TestDefaultConfig(t *testing.T) {
 	if cfg.Server.Port != 8080 {
 		t.Errorf("port = %d, want 8080", cfg.Server.Port)
 	}
-	if cfg.Storage.DBPath != "pulse.db" {
-		t.Errorf("db path = %s, want pulse.db", cfg.Storage.DBPath)
+	if cfg.Storage.DBPath != "anohive.db" {
+		t.Errorf("db path = %s, want anohive.db", cfg.Storage.DBPath)
 	}
 	if cfg.Detector.ErrorRate != 0.3 {
 		t.Errorf("error rate = %f, want 0.3", cfg.Detector.ErrorRate)
@@ -35,7 +35,7 @@ func TestLoadConfigNonExistent(t *testing.T) {
 }
 
 func TestLoadConfigExisting(t *testing.T) {
-	tmpFile, err := os.CreateTemp("", "pulse_config_*.json")
+	tmpFile, err := os.CreateTemp("", "anohive_config_*.json")
 	if err != nil {
 		t.Fatal(err)
 	}
@@ -77,7 +77,7 @@ func TestSaveAndLoadConfig(t *testing.T) {
 	cfg.Server.Port = 7777
 	cfg.Detector.ErrorRate = 0.42
 
-	tmpFile, err := os.CreateTemp("", "pulse_save_*.json")
+	tmpFile, err := os.CreateTemp("", "anohive_save_*.json")
 	if err != nil {
 		t.Fatal(err)
 	}

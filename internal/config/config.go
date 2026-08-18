@@ -80,7 +80,7 @@ func DefaultConfig() *Config {
 			GracefulTimeout: 30,
 		},
 		Storage: StorageConfig{
-			DBPath:          "pulse.db",
+			DBPath:          "anohive.db",
 			Retention:       "7d",
 			MaxSizeMB:       500,
 			MaxLogs:         1000000,
@@ -93,7 +93,7 @@ func DefaultConfig() *Config {
 			BurstCount:     100,
 		},
 		Security: Security{
-			APIKeys:            []string{"pulse-dev-key-2024"},
+			APIKeys:            []string{"anohive-dev-key-2024"},
 			AllowedOrigins:     []string{"http://localhost:3000", "http://localhost:5173", "http://localhost:8080"},
 			RateLimitPerMinute: 100,
 			MaxBodySize:        10 * 1024 * 1024, // 10MB

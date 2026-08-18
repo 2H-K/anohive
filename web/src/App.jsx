@@ -9,7 +9,7 @@ import { useTheme } from './hooks/useTheme'
 import { useLanguage } from './i18n'
 import { ToastProvider, useToast } from './components/Toast'
 import { fetchStats, fetchLogs, fetchAnomalies } from './services/api.js'
-import { PulseIcon, SunIcon, MoonIcon, ListIcon, ShieldIcon, GridIcon } from './components/Icons'
+import { AnoHiveIcon, SunIcon, MoonIcon, ListIcon, ShieldIcon, GridIcon } from './components/Icons'
 
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme()
@@ -113,7 +113,7 @@ function AppContent() {
         <div className="header-left">
           <div className="brand">
             <div className="brand-logo" aria-hidden="true">
-              <PulseIcon size={20} />
+              <AnoHiveIcon size={20} />
             </div>
             <h1 className="brand-name"><span>{t('app.brand')}</span></h1>
           </div>

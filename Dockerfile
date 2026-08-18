@@ -15,13 +15,13 @@ COPY . .
 # Build the binary
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -ldflags='-w -s -extldflags "-static"' \
-    -o /bin/pulse \
+    -o /bin/anohive \
     ./cmd/server
 
 # Build CLI tool
 RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build \
     -ldflags='-w -s -extldflags "-static"' \
-    -o /bin/pulse-cli \
+    -o /bin/anohive-cli \
     ./cmd/cli
 
 # Frontend build stage
@@ -40,17 +40,17 @@ FROM alpine:3.21
 RUN apk add --no-cache ca-certificates tzdata curl
 
 # Create non-root user
-RUN addgroup -S pulse && adduser -S pulse -G pulse
+RUN addgroup -S anohive && adduser -S anohive -G anohive
 
 # Copy binaries
-COPY --from=builder /bin/pulse /usr/local/bin/pulse
-COPY --from=builder /bin/pulse-cli /usr/local/bin/pulse-cli
+COPY --from=builder /bin/anohive /usr/local/bin/anohive
+COPY --from=builder /bin/anohive-cli /usr/local/bin/anohive-cli
 
 # Copy frontend build
-COPY --from=frontend-builder /app/build /var/lib/pulse/web
+COPY --from=frontend-builder /app/build /var/lib/anohive/web
 
 # Create data directory
-RUN mkdir -p /var/lib/pulse/data && chown -R pulse:pulse /var/lib/pulse
+RUN mkdir -p /var/lib/anohive/data && chown -R anohive:anohive /var/lib/anohive
 
 # Health check
 HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
@@ -60,11 +60,11 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
 EXPOSE 8080
 
 # Switch to non-root user
-USER pulse
+USER anohive
 
 # Set working directory
-WORKDIR /var/lib/pulse
+WORKDIR /var/lib/anohive
 
 # Run the server
-ENTRYPOINT ["pulse"]
-CMD ["-db", "/var/lib/pulse/data/pulse.db", "-static", "/var/lib/pulse/web", "-port", "8080"]
+ENTRYPOINT ["anohive"]
+CMD ["-db", "/var/lib/anohive/data/anohive.db", "-static", "/var/lib/anohive/web", "-port", "8080"]

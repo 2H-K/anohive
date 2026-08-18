@@ -13,12 +13,12 @@ import (
 	"time"
 
 	"github.com/gorilla/websocket"
-	"github.com/2H-K/pulse/internal/config"
-	"github.com/2H-K/pulse/internal/detector"
-	"github.com/2H-K/pulse/internal/models"
-	"github.com/2H-K/pulse/internal/parser"
-	"github.com/2H-K/pulse/internal/runtime"
-	"github.com/2H-K/pulse/internal/storage"
+	"github.com/2H-K/anohive/internal/config"
+	"github.com/2H-K/anohive/internal/detector"
+	"github.com/2H-K/anohive/internal/models"
+	"github.com/2H-K/anohive/internal/parser"
+	"github.com/2H-K/anohive/internal/runtime"
+	"github.com/2H-K/anohive/internal/storage"
 )
 
 // Server represents the HTTP API server
@@ -950,7 +950,7 @@ func (a *AlertManager) SendAlert(anomaly *models.Anomaly) {
 
 	// Build alert payload
 	payload := map[string]interface{}{
-		"source":     "pulse",
+		"source":     "anohive",
 		"type":       string(anomaly.Type),
 		"severity":   string(anomaly.Severity),
 		"message":    anomaly.Description,

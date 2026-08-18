@@ -1,14 +1,14 @@
 apiVersion: networking.k8s.io/v1
 kind: NetworkPolicy
 metadata:
-  name: pulse
-  namespace: pulse-monitoring
+  name: anohive
+  namespace: anohiveing
   labels:
-    app: pulse
+    app: anohive
 spec:
   podSelector:
     matchLabels:
-      app: pulse
+      app: anohive
       component: monitor
   policyTypes:
     - Ingress
@@ -20,7 +20,7 @@ spec:
               name: ingress-nginx
         - namespaceSelector:
             matchLabels:
-              name: pulse-monitoring
+              name: anohiveing
       ports:
         - protocol: TCP
           port: 8080

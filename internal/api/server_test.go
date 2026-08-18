@@ -8,10 +8,10 @@ import (
 	"testing"
 	"time"
 
-	"github.com/2H-K/pulse/internal/config"
-	"github.com/2H-K/pulse/internal/detector"
-	"github.com/2H-K/pulse/internal/models"
-	"github.com/2H-K/pulse/internal/storage"
+	"github.com/2H-K/anohive/internal/config"
+	"github.com/2H-K/anohive/internal/detector"
+	"github.com/2H-K/anohive/internal/models"
+	"github.com/2H-K/anohive/internal/storage"
 )
 
 func setupTestServer(t *testing.T) (*Server, *storage.SQLiteStore, func()) {
@@ -213,7 +213,7 @@ func TestAuthMiddleware(t *testing.T) {
 	}
 
 	req2 := httptest.NewRequest("GET", "/test", nil)
-	req2.Header.Set("X-API-Key", "pulse-dev-key-2024")
+	req2.Header.Set("X-API-Key", "anohive-dev-key-2024")
 	w2 := httptest.NewRecorder()
 
 	handler(w2, req2)

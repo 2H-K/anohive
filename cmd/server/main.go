@@ -12,12 +12,12 @@ import (
 	"syscall"
 	"time"
 
-	"github.com/2H-K/pulse/internal/api"
-	"github.com/2H-K/pulse/internal/collector"
-	"github.com/2H-K/pulse/internal/config"
-	"github.com/2H-K/pulse/internal/detector"
-	"github.com/2H-K/pulse/internal/models"
-	"github.com/2H-K/pulse/internal/storage"
+	"github.com/2H-K/anohive/internal/api"
+	"github.com/2H-K/anohive/internal/collector"
+	"github.com/2H-K/anohive/internal/config"
+	"github.com/2H-K/anohive/internal/detector"
+	"github.com/2H-K/anohive/internal/models"
+	"github.com/2H-K/anohive/internal/storage"
 )
 
 type AppConfig struct {
@@ -59,7 +59,7 @@ func main() {
 	}
 
 	logger := log.New(os.Stdout, "", log.LstdFlags)
-	logger.Println("Starting Pulse server...")
+	logger.Println("Starting AnoHive server...")
 	logger.Printf("Host: %s, Port: %d, DB: %s", cfg.Server.Host, cfg.Server.Port, cfg.Storage.DBPath)
 	logger.Printf("Log Level: %s, Format: %s", cfg.Log.Level, cfg.Log.Format)
 
@@ -120,7 +120,7 @@ func main() {
 			if r.URL.Path == "/" {
 				w.Header().Set("Content-Type", "application/json")
 				json.NewEncoder(w).Encode(map[string]interface{}{
-					"name":    "Pulse - Real-time Log Monitor",
+					"name":    "AnoHive - Real-time Log Monitor",
 					"version": "1.0.0",
 					"endpoints": []string{
 						"GET  /api/health",
@@ -153,7 +153,7 @@ func main() {
 
 	// Start server in goroutine
 	go func() {
-		logger.Printf("Pulse server listening on http://%s", addr)
+		logger.Printf("AnoHive server listening on http://%s", addr)
 		if err := server.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 			log.Fatalf("Server error: %v", err)
 		}
@@ -164,7 +164,7 @@ func main() {
 	signal.Notify(sig, syscall.SIGINT, syscall.SIGTERM)
 	<-sig
 
-	logger.Println("Shutting down Pulse server...")
+	logger.Println("Shutting down AnoHive server...")
 
 	// Graceful shutdown
 	ctx, cancel := context.WithTimeout(context.Background(), time.Duration(cfg.Server.GracefulTimeout)*time.Second)
@@ -176,7 +176,7 @@ func main() {
 
 	coll.Close()
 	apiServer.Shutdown()
-	logger.Println("Pulse server stopped")
+	logger.Println("AnoHive server stopped")
 }
 
 func processCollectorOutput(coll *collector.Collector, det *detector.Detector, apiServer *api.Server, store *storage.SQLiteStore) {
@@ -227,7 +227,7 @@ func parseFlags() AppConfig {
 	bufferSize := flag.Int("buffer", 10000, "Collector buffer size")
 
 	flag.Usage = func() {
-		fmt.Fprintf(os.Stderr, "Pulse - Real-time Log Monitor\n\n")
+		fmt.Fprintf(os.Stderr, "AnoHive - Real-time Log Monitor\n\n")
 		fmt.Fprintf(os.Stderr, "Usage: %s [options] [log_files...]\n\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "Options:\n")
 		flag.PrintDefaults()
@@ -247,7 +247,7 @@ func parseFlags() AppConfig {
 		fmt.Fprintf(os.Stderr, "  PULSE_ALERT_WEBHOOK_URL Webhook URL for alerts\n")
 		fmt.Fprintf(os.Stderr, "\nExamples:\n")
 		fmt.Fprintf(os.Stderr, "  %s -port 9090 /var/log/syslog /var/log/auth.log\n", os.Args[0])
-		fmt.Fprintf(os.Stderr, "  %s -db /tmp/pulse.db -static ./web/build\n", os.Args[0])
+		fmt.Fprintf(os.Stderr, "  %s -db /tmp/anohive.db -static ./web/build\n", os.Args[0])
 		fmt.Fprintf(os.Stderr, "  PULSE_LOG_FORMAT=json PULSE_LOG_LEVEL=debug %s\n", os.Args[0])
 	}
 

@@ -96,7 +96,7 @@ export default function LogStream({ logs, onCopyLog }) {
     const url = URL.createObjectURL(blob)
     const a = document.createElement('a')
     a.href = url
-    a.download = `pulse-logs-${new Date().toISOString().slice(0, 19)}.json`
+    a.download = `anohive-logs-${new Date().toISOString().slice(0, 19)}.json`
     a.click()
     URL.revokeObjectURL(url)
   }, [filteredLogs])

@@ -3,7 +3,7 @@ import { createContext, useContext, useState, useCallback, useEffect } from 'rea
 const translations = {
   en: {
     // App
-    'app.brand': 'Pulse',
+    'app.brand': 'AnoHive',
     'app.skipToContent': 'Skip to main content',
     'app.mainNavigation': 'Main navigation',
     'app.connection.live': 'Live',
@@ -91,7 +91,7 @@ const translations = {
   },
   zh: {
     // App
-    'app.brand': 'Pulse',
+    'app.brand': 'AnoHive',
     'app.skipToContent': '跳转到主内容',
     'app.mainNavigation': '主导航',
     'app.connection.live': '在线',
@@ -179,7 +179,7 @@ const translations = {
   },
 };
 
-const STORAGE_KEY = 'pulse_language';
+const STORAGE_KEY = 'anohive_language';
 
 const LanguageContext = createContext(null);
 

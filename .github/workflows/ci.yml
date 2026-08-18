@@ -125,21 +125,21 @@ jobs:
 
       - name: Build backend
         run: |
-          CGO_ENABLED=0 go build -ldflags='-w -s' -o pulse ./cmd/server
-          CGO_ENABLED=0 go build -ldflags='-w -s' -o pulse-cli ./cmd/cli
+          CGO_ENABLED=0 go build -ldflags='-w -s' -o anohive ./cmd/server
+          CGO_ENABLED=0 go build -ldflags='-w -s' -o anohive-cli ./cmd/cli
 
       - name: Test binary
         run: |
-          ./pulse --help || true
-          ./pulse-cli --help || true
+          ./anohive --help || true
+          ./anohive-cli --help || true
 
       - name: Upload artifacts
         uses: actions/upload-artifact@v4
         with:
           name: binaries
           path: |
-            pulse
-            pulse-cli
+            anohive
+            anohive-cli
 
   docker:
     name: Docker Build
@@ -157,14 +157,14 @@ jobs:
         with:
           context: .
           push: false
-          tags: pulse-monitor/pulse:latest
+          tags: anohive/anohive:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
       - name: Test Docker image
         run: |
-          docker run -d --name pulse-test -p 8080:8080 pulse-monitor/pulse:latest
+          docker run -d --name anohive-test -p 8080:8080 anohive/anohive:latest
           sleep 5
-          curl -f http://localhost:8080/api/health || (docker logs pulse-test && exit 1)
-          docker stop pulse-test
-          docker rm pulse-test
+          curl -f http://localhost:8080/api/health || (docker logs anohive-test && exit 1)
+          docker stop anohive-test
+          docker rm anohive-test

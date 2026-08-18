@@ -1,31 +1,31 @@
 version: '3.8'
 
 services:
-  pulse:
+  anohive:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: pulse-monitor
+    container_name: anohive
     restart: unless-stopped
     ports:
       - "8080:8080"
     environment:
-      - PULSE_DB_PATH=/var/lib/pulse/data/pulse.db
-      - PULSE_RETENTION_HOURS=168
-      - PULSE_MAX_LOGS=1000000
-      - PULSE_API_KEY=${PULSE_API_KEY:-pulse-dev-key-2024}
-      - PULSE_LOG_LEVEL=info
-      - PULSE_LOG_FORMAT=json
-      - PULSE_ALLOWED_ORIGINS=*
-      - PULSE_RATE_LIMIT=100
-      - PULSE_WS_MAX_CONNECTIONS=100
-      - PULSE_MAX_BODY_SIZE=10485760
-      - PULSE_CLEANUP_INTERVAL=3600
+      - ANOIVE_DB_PATH=/var/lib/anohive/data/anohive.db
+      - ANOIVE_RETENTION_HOURS=168
+      - ANOIVE_MAX_LOGS=1000000
+      - ANOIVE_API_KEY=${ANOIVE_API_KEY:-anohive-dev-key-2024}
+      - ANOIVE_LOG_LEVEL=info
+      - ANOIVE_LOG_FORMAT=json
+      - ANOIVE_ALLOWED_ORIGINS=*
+      - ANOIVE_RATE_LIMIT=100
+      - ANOIVE_WS_MAX_CONNECTIONS=100
+      - ANOIVE_MAX_BODY_SIZE=10485760
+      - ANOIVE_CLEANUP_INTERVAL=3600
     volumes:
-      - pulse-data:/var/lib/pulse/data
-      - ./configs:/etc/pulse:ro
+      - anohive-data:/var/lib/anohive/data
+      - ./configs:/etc/anohive:ro
     networks:
-      - pulse-net
+      - anohive-net
     deploy:
       resources:
         limits:
@@ -40,31 +40,31 @@ services:
         max-size: "10m"
         max-file: "3"
     labels:
-      - "app=pulse"
+      - "app=anohive"
       - "component=monitor"
 
   # Optional: Log collector sidecar
-  pulse-collector:
+  anohive-collector:
     build:
       context: .
       dockerfile: Dockerfile
-    container_name: pulse-collector
+    container_name: anohive-collector
     restart: unless-stopped
     command:
-      - pulse-cli
+      - anohive-cli
       - collect
       - --directory
       - /var/log/apps
       - --url
-      - http://pulse:8080/api/logs/raw
+      - http://anohive:8080/api/logs/raw
       - --api-key
-      - ${PULSE_API_KEY:-pulse-dev-key-2024}
+      - ${ANOIVE_API_KEY:-anohive-dev-key-2024}
     volumes:
       - app-logs:/var/log/apps:ro
     networks:
-      - pulse-net
+      - anohive-net
     depends_on:
-      pulse:
+      anohive:
         condition: service_healthy
     logging:
       driver: json-file
@@ -72,17 +72,17 @@ services:
         max-size: "10m"
         max-file: "3"
     labels:
-      - "app=pulse"
+      - "app=anohive"
       - "component=collector"
     profiles:
       - collector
 
 volumes:
-  pulse-data:
+  anohive-data:
     driver: local
   app-logs:
     driver: local
 
 networks:
-  pulse-net:
+  anohive-net:
     driver: bridge

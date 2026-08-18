@@ -5,8 +5,8 @@ import (
 	"testing"
 	"time"
 
-	"github.com/2H-K/pulse/internal/models"
-	"github.com/2H-K/pulse/internal/parser"
+	"github.com/2H-K/anohive/internal/models"
+	"github.com/2H-K/anohive/internal/parser"
 )
 
 func TestNewCollector(t *testing.T) {

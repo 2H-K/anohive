@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: pulse
-  namespace: pulse-monitoring
+  name: anohive
+  namespace: anohiveing
   labels:
-    app: pulse
+    app: anohive
     component: monitor
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: pulse
+      app: anohive
       component: monitor
   strategy:
     type: RollingUpdate
@@ -20,21 +20,21 @@ spec:
   template:
     metadata:
       labels:
-        app: pulse
+        app: anohive
         component: monitor
       annotations:
         prometheus.io/scrape: "true"
         prometheus.io/port: "8080"
         prometheus.io/path: "/api/metrics"
     spec:
-      serviceAccountName: pulse
+      serviceAccountName: anohive
       securityContext:
         runAsNonRoot: true
         runAsUser: 1000
         fsGroup: 1000
       containers:
-        - name: pulse
-          image: pulse-monitor/pulse:latest
+        - name: anohive
+          image: anohive/anohive:latest
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
@@ -42,12 +42,12 @@ spec:
               protocol: TCP
           envFrom:
             - configMapRef:
-                name: pulse-config
+                name: anohive-config
             - secretRef:
-                name: pulse-secrets
+                name: anohive-secrets
           env:
             - name: PULSE_DB_PATH
-              value: "/var/lib/pulse/data/pulse.db"
+              value: "/var/lib/anohive/data/anohive.db"
           resources:
             requests:
               memory: "128Mi"
@@ -81,7 +81,7 @@ spec:
             failureThreshold: 10
           volumeMounts:
             - name: data
-              mountPath: /var/lib/pulse/data
+              mountPath: /var/lib/anohive/data
           lifecycle:
             preStop:
               exec:
@@ -89,13 +89,13 @@ spec:
       volumes:
         - name: data
           persistentVolumeClaim:
-            claimName: pulse-data
+            claimName: anohive-data
       terminationGracePeriodSeconds: 60
 ---
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: pulse
-  namespace: pulse-monitoring
+  name: anohive
+  namespace: anohiveing
   labels:
-    app: pulse
+    app: anohive

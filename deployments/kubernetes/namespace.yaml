@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Namespace
 metadata:
-  name: pulse-monitoring
+  name: anohiveing
   labels:
-    app: pulse
+    app: anohive
     component: monitoring

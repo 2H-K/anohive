@@ -43,20 +43,20 @@ jobs:
       - name: Build binaries
         run: |
           # Linux AMD64
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags='-w -s' -o dist/pulse-linux-amd64 ./cmd/server
-          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags='-w -s' -o dist/pulse-cli-linux-amd64 ./cmd/cli
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags='-w -s' -o dist/anohive-linux-amd64 ./cmd/server
+          CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -ldflags='-w -s' -o dist/anohive-cli-linux-amd64 ./cmd/cli
           
           # Linux ARM64
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags='-w -s' -o dist/pulse-linux-arm64 ./cmd/server
-          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags='-w -s' -o dist/pulse-cli-linux-arm64 ./cmd/cli
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags='-w -s' -o dist/anohive-linux-arm64 ./cmd/server
+          CGO_ENABLED=0 GOOS=linux GOARCH=arm64 go build -ldflags='-w -s' -o dist/anohive-cli-linux-arm64 ./cmd/cli
           
           # macOS AMD64
-          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags='-w -s' -o dist/pulse-darwin-amd64 ./cmd/server
-          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags='-w -s' -o dist/pulse-cli-darwin-amd64 ./cmd/cli
+          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags='-w -s' -o dist/anohive-darwin-amd64 ./cmd/server
+          CGO_ENABLED=0 GOOS=darwin GOARCH=amd64 go build -ldflags='-w -s' -o dist/anohive-cli-darwin-amd64 ./cmd/cli
           
           # macOS ARM64
-          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags='-w -s' -o dist/pulse-darwin-arm64 ./cmd/server
-          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags='-w -s' -o dist/pulse-cli-darwin-arm64 ./cmd/cli
+          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags='-w -s' -o dist/anohive-darwin-arm64 ./cmd/server
+          CGO_ENABLED=0 GOOS=darwin GOARCH=arm64 go build -ldflags='-w -s' -o dist/anohive-cli-darwin-arm64 ./cmd/cli
 
       - name: Create checksums
         run: |

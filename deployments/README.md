@@ -22,7 +22,7 @@ docker-compose down
 Edit `docker-compose.yml` or use environment variables in `.env` file:
 
 ```env
-PULSE_API_KEY=your-secure-api-key
+ANOIVE_API_KEY=your-secure-api-key
 PULSE_LOG_LEVEL=info
 PULSE_LOG_FORMAT=json
 PULSE_RETENTION_HOURS=168
@@ -30,7 +30,7 @@ PULSE_RETENTION_HOURS=168
 
 ### Volumes
 
-- `pulse-data`: Persistent database storage
+- `anohive-data`: Persistent database storage
 - `app-logs`: Application logs (when using collector profile)
 
 ### Profiles
@@ -51,10 +51,10 @@ docker-compose --profile collector up -d
 kubectl apply -k deployments/kubernetes/
 
 # Check status
-kubectl -n pulse-monitoring get pods
+kubectl -n anohive get pods
 
 # Port forward for local access
-kubectl -n pulse-monitoring port-forward svc/pulse 8080:80
+kubectl -n anohive port-forward svc/anohive 8080:80
 ```
 
 ### Directory Structure
@@ -81,45 +81,45 @@ deployments/kubernetes/
 
 ```bash
 # Scale manually
-kubectl -n pulse-monitoring scale deployment/pulse --replicas=3
+kubectl -n anohive scale deployment/anohive --replicas=3
 
 # Or rely on HPA (configured in hpa.yaml)
-kubectl -n pulse-monitoring get hpa
+kubectl -n anohive get hpa
 ```
 
 ### Monitoring
 
 ```bash
 # Check pod logs
-kubectl -n pulse-monitoring logs -f deployment/pulse
+kubectl -n anohive logs -f deployment/anohive
 
 # Check resource usage
-kubectl -n pulse-monitoring top pods
+kubectl -n anohive top pods
 
 # Check events
-kubectl -n pulse-monitoring get events
+kubectl -n anohive get events
 ```
 
 ### Upgrades
 
 ```bash
 # Update image
-kubectl -n pulse-monitoring set image deployment/pulse pulse=pulse-monitor/pulse:v1.2.0
+kubectl -n anohive set image deployment/anohive anohive=anohive/anohive:v1.2.0
 
 # Check rollout status
-kubectl -n pulse-monitoring rollout status deployment/pulse
+kubectl -n anohive rollout status deployment/anohive
 
 # Rollback if needed
-kubectl -n pulse-monitoring rollout undo deployment/pulse
+kubectl -n anohive rollout undo deployment/anohive
 ```
 
 ### Backup
 
 ```bash
 # Create backup pod
-kubectl -n pulse-monitoring run pulse-backup --rm -i --restart=Never \
-  --image=pulse-monitor/pulse:latest \
-  --overrides='{"spec": {"containers": [{"name": "backup", "image": "pulse-monitor/pulse:latest", "command": ["pulse-cli", "backup", "-db", "/var/lib/pulse/data/pulse.db", "-output", "/backup/pulse-backup.db"], "volumeMounts": [{"name": "data", "mountPath": "/var/lib/pulse/data"}, {"name": "backup", "mountPath": "/backup"}]}], "volumes": [{"name": "data", "persistentVolumeClaim": {"claimName": "pulse-data"}}, {"name": "backup", "emptyDir": {}}]}}'
+kubectl -n anohive run anohive-backup --rm -i --restart=Never \
+  --image=anohive/anohive:latest \
+  --overrides='{"spec": {"containers": [{"name": "backup", "image": "anohive/anohive:latest", "command": ["anohive-cli", "backup", "-db", "/var/lib/anohive/data/anohive.db", "-output", "/backup/anohive-backup.db"], "volumeMounts": [{"name": "data", "mountPath": "/var/lib/anohive/data"}, {"name": "backup", "mountPath": "/backup"}]}], "volumes": [{"name": "data", "persistentVolumeClaim": {"claimName": "anohive-data"}}, {"name": "backup", "emptyDir": {}}]}}'
 ```
 
 ## CI/CD

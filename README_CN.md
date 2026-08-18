@@ -1,6 +1,6 @@
-# Pulse - 实时日志监控与异常检测系统
+# AnoHive - 实时日志监控与异常检测系统
 
-Pulse 是一个高性能的实时日志聚合与异常检测系统。它可以从多个来源收集日志，解析多种日志格式，实时检测异常，并提供 Web 监控面板。
+AnoHive 是一个高性能的实时日志聚合与异常检测系统。它可以从多个来源收集日志，解析多种日志格式，实时检测异常，并提供 Web 监控面板。
 
 ## 功能特性
 
@@ -102,25 +102,25 @@ curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
 
 ```bash
 # 检查服务器健康状态
-./build/pulse-cli health
+./build/anohive-cli health
 
 # 查看最新日志
-./build/pulse-cli logs --level ERROR --limit 10
+./build/anohive-cli logs --level ERROR --limit 10
 
 # 摄入日志
-./build/pulse-cli ingest --level ERROR "Something went wrong"
+./build/anohive-cli ingest --level ERROR "Something went wrong"
 
 # 查看异常
-./build/pulse-cli anomalies --severity CRITICAL
+./build/anohive-cli anomalies --severity CRITICAL
 
 # 实时流式日志
-./build/pulse-cli stream
+./build/anohive-cli stream
 
 # 备份数据库
-./build/pulse-cli backup -db /var/lib/pulse/data/pulse.db -output /tmp/pulse-backup.db
+./build/anohive-cli backup -db /var/lib/anohive/data/anohive.db -output /tmp/pulse-backup.db
 
 # 恢复数据库
-./build/pulse-cli restore -db /var/lib/pulse/data/pulse.db -input /tmp/pulse-backup.db
+./build/anohive-cli restore -db /var/lib/anohive/data/anohive.db -input /tmp/pulse-backup.db
 ```
 
 ## API 端点
@@ -151,7 +151,7 @@ curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
 |------|--------|------|
 | -host | 0.0.0.0 | 服务器绑定地址 |
 | -port | 8080 | 服务器端口 |
-| -db | pulse.db | SQLite 数据库路径 |
+| -db | anohive.db | SQLite 数据库路径 |
 | -static | | 静态文件目录 |
 | -config | | 配置文件路径 |
 | -buffer | 10000 | 采集器缓冲区大小 |
@@ -162,10 +162,10 @@ curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
 |------|--------|------|
 | PULSE_HOST | 0.0.0.0 | 服务器绑定地址 |
 | PULSE_PORT | 8080 | 服务器端口 |
-| PULSE_DB_PATH | pulse.db | 数据库路径 |
+| ANOIVE_DB_PATH | anohive.db | 数据库路径 |
 | PULSE_RETENTION_HOURS | 168 | 日志保留小时数（7天） |
 | PULSE_MAX_LOGS | 1000000 | 最大日志保留数量 |
-| PULSE_API_KEY | pulse-dev-key-2024 | 认证 API Key |
+| ANOIVE_API_KEY | anohive-dev-key-2024 | 认证 API Key |
 | PULSE_LOG_LEVEL | info | 日志级别 (debug/info/warn/error) |
 | PULSE_LOG_FORMAT | text | 日志格式 (text/json) |
 | PULSE_ALLOWED_ORIGINS | * | 允许的 CORS 来源 |
@@ -184,8 +184,8 @@ curl -X PUT http://localhost:8080/api/config/thresholds \
   -d '{"error_rate": 0.5, "rate_multiplier": 4.0, "burst": 200}'
 
 # 通过 CLI 更新
-./build/pulse-cli config error_rate 0.5
-./build/pulse-cli config burst 200
+./build/anohive-cli config error_rate 0.5
+./build/anohive-cli config burst 200
 ```
 
 ## 支持的日志格式
@@ -217,7 +217,7 @@ curl -X PUT http://localhost:8080/api/config/thresholds \
 docker-compose up -d
 
 # 查看日志
-docker-compose logs -f pulse
+docker-compose logs -f anohive
 
 # 停止
 docker-compose down
@@ -230,10 +230,10 @@ docker-compose down
 kubectl apply -k deployments/kubernetes/
 
 # 检查状态
-kubectl -n pulse-monitoring get pods
+kubectl -n anohive get pods
 
 # 端口转发
-kubectl -n pulse-monitoring port-forward svc/pulse 8080:80
+kubectl -n anohive port-forward svc/anohive 8080:80
 ```
 
 ## 测试
@@ -252,7 +252,7 @@ go test -v ./test/
 ## 项目结构
 
 ```
-pulse/
+anohive/anohive/
 ├── cmd/
 │   ├── server/        # 服务器入口
 │   └── cli/           # CLI 入口
@@ -301,5 +301,5 @@ MIT
 
 ## 相关链接
 
-- GitHub: https://github.com/2H-K/pulse
-- 问题反馈: https://github.com/2H-K/pulse/issues
+- GitHub: https://github.com/2H-K/anohive
+- 问题反馈: https://github.com/2H-K/anohive/issues

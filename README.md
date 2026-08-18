@@ -1,8 +1,8 @@
-# Pulse - Real-time Log Monitor
+# AnoHive - Real-time Log Monitor
 
 [中文文档](README_CN.md) | [English](README.md)
 
-Pulse is a high-performance, real-time log aggregation and anomaly detection system. It collects logs from multiple sources, parses various log formats, detects anomalies in real-time, and provides a web dashboard for monitoring.
+AnoHive is a high-performance, real-time log aggregation and anomaly detection system. It collects logs from multiple sources, parses various log formats, detects anomalies in real-time, and provides a web dashboard for monitoring.
 
 ## Features
 
@@ -101,19 +101,19 @@ curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
 
 ```bash
 # Check server health
-./build/pulse-cli health
+./build/anohive-cli health
 
 # View recent logs
-./build/pulse-cli logs --level ERROR --limit 10
+./build/anohive-cli logs --level ERROR --limit 10
 
 # Ingest logs
-./build/pulse-cli ingest --level ERROR "Something went wrong"
+./build/anohive-cli ingest --level ERROR "Something went wrong"
 
 # View anomalies
-./build/pulse-cli anomalies --severity CRITICAL
+./build/anohive-cli anomalies --severity CRITICAL
 
 # Stream real-time logs
-./build/pulse-cli stream
+./build/anohive-cli stream
 ```
 
 ## API Endpoints
@@ -140,7 +140,7 @@ curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
 |------|---------|-------------|
 | -host | 0.0.0.0 | Server host |
 | -port | 8080 | Server port |
-| -db | pulse.db | SQLite database path |
+| -db | anohive.db | SQLite database path |
 | -static | | Static files directory |
 | -buffer | 10000 | Collector buffer size |
 
@@ -153,8 +153,8 @@ curl -X PUT http://localhost:8080/api/config/thresholds \
   -d '{"error_rate": 0.5, "rate_multiplier": 4.0, "burst": 200}'
 
 # Update via CLI
-./build/pulse-cli config error_rate 0.5
-./build/pulse-cli config burst 200
+./build/anohive-cli config error_rate 0.5
+./build/anohive-cli config burst 200
 ```
 
 ## Supported Log Formats
@@ -232,7 +232,7 @@ go test -v ./test/
 ## Project Structure
 
 ```
-pulse/
+anohive/anohive/
 ├── cmd/
 │   ├── server/        # Server entry point
 │   └── cli/           # CLI entry point

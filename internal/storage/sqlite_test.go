@@ -5,11 +5,11 @@ import (
 	"testing"
 	"time"
 
-	"github.com/2H-K/pulse/internal/models"
+	"github.com/2H-K/anohive/internal/models"
 )
 
 func setupTestDB(t *testing.T) (*SQLiteStore, func()) {
-	tmpFile, err := os.CreateTemp("", "pulse_test_*.db")
+	tmpFile, err := os.CreateTemp("", "anohive_test_*.db")
 	if err != nil {
 		t.Fatalf("failed to create temp file: %v", err)
 	}

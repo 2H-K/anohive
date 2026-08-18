@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: PersistentVolumeClaim
 metadata:
-  name: pulse-data
-  namespace: pulse-monitoring
+  name: anohive-data
+  namespace: anohiveing
   labels:
-    app: pulse
+    app: anohive
 spec:
   accessModes:
     - ReadWriteOnce
