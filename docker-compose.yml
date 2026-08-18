@@ -1,0 +1,88 @@
+version: '3.8'
+
+services:
+  pulse:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pulse-monitor
+    restart: unless-stopped
+    ports:
+      - "8080:8080"
+    environment:
+      - PULSE_DB_PATH=/var/lib/pulse/data/pulse.db
+      - PULSE_RETENTION_HOURS=168
+      - PULSE_MAX_LOGS=1000000
+      - PULSE_API_KEY=${PULSE_API_KEY:-pulse-dev-key-2024}
+      - PULSE_LOG_LEVEL=info
+      - PULSE_LOG_FORMAT=json
+      - PULSE_ALLOWED_ORIGINS=*
+      - PULSE_RATE_LIMIT=100
+      - PULSE_WS_MAX_CONNECTIONS=100
+      - PULSE_MAX_BODY_SIZE=10485760
+      - PULSE_CLEANUP_INTERVAL=3600
+    volumes:
+      - pulse-data:/var/lib/pulse/data
+      - ./configs:/etc/pulse:ro
+    networks:
+      - pulse-net
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+          cpus: '1.0'
+        reservations:
+          memory: 128M
+          cpus: '0.25'
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      - "app=pulse"
+      - "component=monitor"
+
+  # Optional: Log collector sidecar
+  pulse-collector:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: pulse-collector
+    restart: unless-stopped
+    command:
+      - pulse-cli
+      - collect
+      - --directory
+      - /var/log/apps
+      - --url
+      - http://pulse:8080/api/logs/raw
+      - --api-key
+      - ${PULSE_API_KEY:-pulse-dev-key-2024}
+    volumes:
+      - app-logs:/var/log/apps:ro
+    networks:
+      - pulse-net
+    depends_on:
+      pulse:
+        condition: service_healthy
+    logging:
+      driver: json-file
+      options:
+        max-size: "10m"
+        max-file: "3"
+    labels:
+      - "app=pulse"
+      - "component=collector"
+    profiles:
+      - collector
+
+volumes:
+  pulse-data:
+    driver: local
+  app-logs:
+    driver: local
+
+networks:
+  pulse-net:
+    driver: bridge
