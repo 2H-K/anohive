@@ -57,7 +57,7 @@ HEALTHCHECK --interval=30s --timeout=5s --start-period=10s --retries=3 \
     CMD curl -f http://localhost:8080/api/health || exit 1
 
 # Expose port
-EXPOSE 8080
+EXPOSE 8200
 
 # Switch to non-root user
 USER anohive
@@ -67,4 +67,4 @@ WORKDIR /var/lib/anohive
 
 # Run the server
 ENTRYPOINT ["anohive"]
-CMD ["-db", "/var/lib/anohive/data/anohive.db", "-static", "/var/lib/anohive/web", "-port", "8080"]
+CMD ["-db", "/var/lib/anohive/data/anohive.db", "-static", "/var/lib/anohive/web", "-port", "8200"]

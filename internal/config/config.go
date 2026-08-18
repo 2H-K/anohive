@@ -72,7 +72,7 @@ func DefaultConfig() *Config {
 	return &Config{
 		Server: ServerConfig{
 			Host:            "0.0.0.0",
-			Port:            8080,
+			Port:            8200,
 			ReadTimeout:     15,
 			WriteTimeout:    15,
 			IdleTimeout:     60,
@@ -139,102 +139,102 @@ func LoadConfig(path string) (*Config, error) {
 
 func (c *Config) loadFromEnv() {
 	// Server
-	if v := os.Getenv("PULSE_HOST"); v != "" {
+	if v := os.Getenv("ANOHIVE_HOST"); v != "" {
 		c.Server.Host = v
 	}
-	if v := os.Getenv("PULSE_PORT"); v != "" {
+	if v := os.Getenv("ANOHIVE_PORT"); v != "" {
 		if port, err := strconv.Atoi(v); err == nil {
 			c.Server.Port = port
 		}
 	}
-	if v := os.Getenv("PULSE_STATIC_DIR"); v != "" {
+	if v := os.Getenv("ANOHIVE_STATIC_DIR"); v != "" {
 		c.Server.StaticDir = v
 	}
-	if v := os.Getenv("PULSE_READ_TIMEOUT"); v != "" {
+	if v := os.Getenv("ANOHIVE_READ_TIMEOUT"); v != "" {
 		if timeout, err := strconv.Atoi(v); err == nil {
 			c.Server.ReadTimeout = timeout
 		}
 	}
-	if v := os.Getenv("PULSE_WRITE_TIMEOUT"); v != "" {
+	if v := os.Getenv("ANOHIVE_WRITE_TIMEOUT"); v != "" {
 		if timeout, err := strconv.Atoi(v); err == nil {
 			c.Server.WriteTimeout = timeout
 		}
 	}
-	if v := os.Getenv("PULSE_GRACEFUL_TIMEOUT"); v != "" {
+	if v := os.Getenv("ANOHIVE_GRACEFUL_TIMEOUT"); v != "" {
 		if timeout, err := strconv.Atoi(v); err == nil {
 			c.Server.GracefulTimeout = timeout
 		}
 	}
 
 	// Storage
-	if v := os.Getenv("PULSE_DB_PATH"); v != "" {
+	if v := os.Getenv("ANOHIVE_DB_PATH"); v != "" {
 		c.Storage.DBPath = v
 	}
-	if v := os.Getenv("PULSE_RETENTION_HOURS"); v != "" {
+	if v := os.Getenv("ANOHIVE_RETENTION_HOURS"); v != "" {
 		if hours, err := strconv.Atoi(v); err == nil {
 			c.Storage.Retention = strconv.Itoa(hours) + "h"
 		}
 	}
-	if v := os.Getenv("PULSE_MAX_LOGS"); v != "" {
+	if v := os.Getenv("ANOHIVE_MAX_LOGS"); v != "" {
 		if max, err := strconv.Atoi(v); err == nil {
 			c.Storage.MaxLogs = max
 		}
 	}
-	if v := os.Getenv("PULSE_CLEANUP_INTERVAL"); v != "" {
+	if v := os.Getenv("ANOHIVE_CLEANUP_INTERVAL"); v != "" {
 		if interval, err := strconv.Atoi(v); err == nil {
 			c.Storage.CleanupInterval = interval
 		}
 	}
 
 	// Security
-	if v := os.Getenv("PULSE_API_KEY"); v != "" {
+	if v := os.Getenv("ANOHIVE_API_KEY"); v != "" {
 		c.Security.APIKeys = []string{v}
 	}
-	if v := os.Getenv("PULSE_ALLOWED_ORIGINS"); v != "" {
+	if v := os.Getenv("ANOHIVE_ALLOWED_ORIGINS"); v != "" {
 		if v == "*" {
 			c.Security.AllowedOrigins = []string{"*"}
 		} else {
 			c.Security.AllowedOrigins = strings.Split(v, ",")
 		}
 	}
-	if v := os.Getenv("PULSE_RATE_LIMIT"); v != "" {
+	if v := os.Getenv("ANOHIVE_RATE_LIMIT"); v != "" {
 		if limit, err := strconv.Atoi(v); err == nil {
 			c.Security.RateLimitPerMinute = limit
 		}
 	}
-	if v := os.Getenv("PULSE_WS_MAX_CONNECTIONS"); v != "" {
+	if v := os.Getenv("ANOHIVE_WS_MAX_CONNECTIONS"); v != "" {
 		if max, err := strconv.Atoi(v); err == nil {
 			c.Security.MaxWSConnections = max
 		}
 	}
-	if v := os.Getenv("PULSE_MAX_BODY_SIZE"); v != "" {
+	if v := os.Getenv("ANOHIVE_MAX_BODY_SIZE"); v != "" {
 		if size, err := strconv.ParseInt(v, 10, 64); err == nil {
 			c.Security.MaxBodySize = size
 		}
 	}
-	if v := os.Getenv("PULSE_CORS_ORIGIN"); v != "" {
+	if v := os.Getenv("ANOHIVE_CORS_ORIGIN"); v != "" {
 		c.Security.CORSAllowedOrigin = v
 	}
 
 	// Log
-	if v := os.Getenv("PULSE_LOG_LEVEL"); v != "" {
+	if v := os.Getenv("ANOHIVE_LOG_LEVEL"); v != "" {
 		c.Log.Level = v
 	}
-	if v := os.Getenv("PULSE_LOG_FORMAT"); v != "" {
+	if v := os.Getenv("ANOHIVE_LOG_FORMAT"); v != "" {
 		c.Log.Format = v
 	}
-	if v := os.Getenv("PULSE_LOG_OUTPUT"); v != "" {
+	if v := os.Getenv("ANOHIVE_LOG_OUTPUT"); v != "" {
 		c.Log.Output = v
 	}
 
 	// Alert
-	if v := os.Getenv("PULSE_ALERT_ENABLED"); v != "" {
+	if v := os.Getenv("ANOHIVE_ALERT_ENABLED"); v != "" {
 		c.Alert.Enabled = v == "true" || v == "1"
 	}
-	if v := os.Getenv("PULSE_ALERT_WEBHOOK_URL"); v != "" {
+	if v := os.Getenv("ANOHIVE_ALERT_WEBHOOK_URL"); v != "" {
 		c.Alert.WebhookURL = v
 	}
-	if v := os.Getenv("PULSE_ALERT_COOLDOWN"); v != "" {
+	if v := os.Getenv("ANOHIVE_ALERT_COOLDOWN"); v != "" {
 		if cooldown, err := strconv.Atoi(v); err == nil {
 			c.Alert.CooldownSeconds = cooldown
 		}

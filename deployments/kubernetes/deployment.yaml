@@ -24,7 +24,7 @@ spec:
         component: monitor
       annotations:
         prometheus.io/scrape: "true"
-        prometheus.io/port: "8080"
+        prometheus.io/port: "8200"
         prometheus.io/path: "/api/metrics"
     spec:
       serviceAccountName: anohive
@@ -38,7 +38,7 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - name: http
-              containerPort: 8080
+              containerPort: 8200
               protocol: TCP
           envFrom:
             - configMapRef:

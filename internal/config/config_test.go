@@ -12,8 +12,8 @@ func TestDefaultConfig(t *testing.T) {
 	if cfg.Server.Host != "0.0.0.0" {
 		t.Errorf("host = %s, want 0.0.0.0", cfg.Server.Host)
 	}
-	if cfg.Server.Port != 8080 {
-		t.Errorf("port = %d, want 8080", cfg.Server.Port)
+	if cfg.Server.Port != 8200 {
+		t.Errorf("port = %d, want 8200", cfg.Server.Port)
 	}
 	if cfg.Storage.DBPath != "anohive.db" {
 		t.Errorf("db path = %s, want anohive.db", cfg.Storage.DBPath)
@@ -29,7 +29,7 @@ func TestLoadConfigNonExistent(t *testing.T) {
 		t.Fatalf("unexpected error: %v", err)
 	}
 
-	if cfg.Server.Port != 8080 {
+	if cfg.Server.Port != 8200 {
 		t.Error("expected default config for non-existent path")
 	}
 }

@@ -49,19 +49,19 @@ make build
 ### 运行服务器
 
 ```bash
-./build/pulse -port 8080
+./build/anohive -port 8200
 ```
 
 ### 摄入日志
 
 ```bash
 # 单条日志
-curl -X POST http://localhost:8080/api/logs/ingest \
+curl -X POST http://localhost:8200/api/logs/ingest \
   -H "Content-Type: application/json" \
   -d '{"source": "myapp", "entries": [{"level": "ERROR", "message": "Connection failed"}]}'
 
 # 批量摄入
-curl -X POST http://localhost:8080/api/logs/ingest \
+curl -X POST http://localhost:8200/api/logs/ingest \
   -H "Content-Type: application/json" \
   -d '{"source": "myapp", "entries": [
     {"level": "INFO", "message": "Server started"},
@@ -73,7 +73,7 @@ curl -X POST http://localhost:8080/api/logs/ingest \
 ### 摄入原始日志（自动解析）
 
 ```bash
-curl -X POST http://localhost:8080/api/logs/raw \
+curl -X POST http://localhost:8200/api/logs/raw \
   -H "Content-Type: application/json" \
   -d '{"source": "myapp", "lines": [
     "stdout | 2024-01-15T10:30:00.123456789Z Server started",
@@ -86,16 +86,16 @@ curl -X POST http://localhost:8080/api/logs/raw \
 
 ```bash
 # 获取最新日志
-curl "http://localhost:8080/api/logs?limit=10"
+curl "http://localhost:8200/api/logs?limit=10"
 
 # 按级别过滤
-curl "http://localhost:8080/api/logs?level=ERROR"
+curl "http://localhost:8200/api/logs?level=ERROR"
 
 # 搜索
-curl "http://localhost:8080/api/logs?search=database"
+curl "http://localhost:8200/api/logs?search=database"
 
 # 组合过滤
-curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
+curl "http://localhost:8200/api/logs?source=myapp&level=ERROR&limit=20"
 ```
 
 ### CLI 使用
@@ -150,7 +150,7 @@ curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
 | 参数 | 默认值 | 描述 |
 |------|--------|------|
 | -host | 0.0.0.0 | 服务器绑定地址 |
-| -port | 8080 | 服务器端口 |
+| -port | 8200 | 服务器端口 |
 | -db | anohive.db | SQLite 数据库路径 |
 | -static | | 静态文件目录 |
 | -config | | 配置文件路径 |
@@ -160,25 +160,25 @@ curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
 
 | 变量 | 默认值 | 描述 |
 |------|--------|------|
-| PULSE_HOST | 0.0.0.0 | 服务器绑定地址 |
-| PULSE_PORT | 8080 | 服务器端口 |
-| ANOIVE_DB_PATH | anohive.db | 数据库路径 |
-| PULSE_RETENTION_HOURS | 168 | 日志保留小时数（7天） |
-| PULSE_MAX_LOGS | 1000000 | 最大日志保留数量 |
-| ANOIVE_API_KEY | anohive-dev-key-2024 | 认证 API Key |
-| PULSE_LOG_LEVEL | info | 日志级别 (debug/info/warn/error) |
-| PULSE_LOG_FORMAT | text | 日志格式 (text/json) |
-| PULSE_ALLOWED_ORIGINS | * | 允许的 CORS 来源 |
-| PULSE_RATE_LIMIT | 100 | 每分钟每 IP 请求限制 |
-| PULSE_WS_MAX_CONNECTIONS | 100 | 最大 WebSocket 连接数 |
-| PULSE_ALERT_ENABLED | false | 启用 Webhook 告警 |
-| PULSE_ALERT_WEBHOOK_URL | | Webhook 告警 URL |
+| ANOHIVE_HOST | 0.0.0.0 | 服务器绑定地址 |
+| ANOHIVE_PORT | 8200 | 服务器端口 |
+| ANOHIVE_DB_PATH | anohive.db | 数据库路径 |
+| ANOHIVE_RETENTION_HOURS | 168 | 日志保留小时数（7天） |
+| ANOHIVE_MAX_LOGS | 1000000 | 最大日志保留数量 |
+| ANOHIVE_API_KEY | anohive-dev-key-2024 | 认证 API Key |
+| ANOHIVE_LOG_LEVEL | info | 日志级别 (debug/info/warn/error) |
+| ANOHIVE_LOG_FORMAT | text | 日志格式 (text/json) |
+| ANOHIVE_ALLOWED_ORIGINS | * | 允许的 CORS 来源 |
+| ANOHIVE_RATE_LIMIT | 100 | 每分钟每 IP 请求限制 |
+| ANOHIVE_WS_MAX_CONNECTIONS | 100 | 最大 WebSocket 连接数 |
+| ANOHIVE_ALERT_ENABLED | false | 启用 Webhook 告警 |
+| ANOHIVE_ALERT_WEBHOOK_URL | | Webhook 告警 URL |
 
 ### 检测阈值
 
 ```bash
 # 通过 API 更新
-curl -X PUT http://localhost:8080/api/config/thresholds \
+curl -X PUT http://localhost:8200/api/config/thresholds \
   -H "X-API-Key: your-api-key" \
   -H "Content-Type: application/json" \
   -d '{"error_rate": 0.5, "rate_multiplier": 4.0, "burst": 200}'
@@ -233,7 +233,7 @@ kubectl apply -k deployments/kubernetes/
 kubectl -n anohive get pods
 
 # 端口转发
-kubectl -n anohive port-forward svc/anohive 8080:80
+kubectl -n anohive port-forward svc/anohive 8200:80
 ```
 
 ## 测试

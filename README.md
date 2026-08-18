@@ -48,19 +48,19 @@ make build
 ### Run Server
 
 ```bash
-./build/pulse -port 8080
+./build/anohive -port 8200
 ```
 
 ### Ingest Logs
 
 ```bash
 # Single log entry
-curl -X POST http://localhost:8080/api/logs/ingest \
+curl -X POST http://localhost:8200/api/logs/ingest \
   -H "Content-Type: application/json" \
   -d '{"source": "myapp", "entries": [{"level": "ERROR", "message": "Connection failed"}]}'
 
 # Batch ingestion
-curl -X POST http://localhost:8080/api/logs/ingest \
+curl -X POST http://localhost:8200/api/logs/ingest \
   -H "Content-Type: application/json" \
   -d '{"source": "myapp", "entries": [
     {"level": "INFO", "message": "Server started"},
@@ -72,7 +72,7 @@ curl -X POST http://localhost:8080/api/logs/ingest \
 ### Ingest Raw Logs (Auto-Parse)
 
 ```bash
-curl -X POST http://localhost:8080/api/logs/raw \
+curl -X POST http://localhost:8200/api/logs/raw \
   -H "Content-Type: application/json" \
   -d '{"source": "myapp", "lines": [
     "stdout | 2024-01-15T10:30:00.123456789Z Server started",
@@ -85,16 +85,16 @@ curl -X POST http://localhost:8080/api/logs/raw \
 
 ```bash
 # Get recent logs
-curl "http://localhost:8080/api/logs?limit=10"
+curl "http://localhost:8200/api/logs?limit=10"
 
 # Filter by level
-curl "http://localhost:8080/api/logs?level=ERROR"
+curl "http://localhost:8200/api/logs?level=ERROR"
 
 # Search
-curl "http://localhost:8080/api/logs?search=database"
+curl "http://localhost:8200/api/logs?search=database"
 
 # Combined filters
-curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
+curl "http://localhost:8200/api/logs?source=myapp&level=ERROR&limit=20"
 ```
 
 ### CLI Usage
@@ -139,7 +139,7 @@ curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
 | Flag | Default | Description |
 |------|---------|-------------|
 | -host | 0.0.0.0 | Server host |
-| -port | 8080 | Server port |
+| -port | 8200 | Server port |
 | -db | anohive.db | SQLite database path |
 | -static | | Static files directory |
 | -buffer | 10000 | Collector buffer size |
@@ -148,7 +148,7 @@ curl "http://localhost:8080/api/logs?source=myapp&level=ERROR&limit=20"
 
 ```bash
 # Update via API
-curl -X PUT http://localhost:8080/api/config/thresholds \
+curl -X PUT http://localhost:8200/api/config/thresholds \
   -H "Content-Type: application/json" \
   -d '{"error_rate": 0.5, "rate_multiplier": 4.0, "burst": 200}'
 

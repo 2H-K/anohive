@@ -1,7 +1,7 @@
 .PHONY: all build test clean run-server run-cli frontend
 
-BINARY_NAME=pulse
-CLI_NAME=pulse-cli
+BINARY_NAME=anohive
+CLI_NAME=anohive-cli
 BUILD_DIR=./build
 GO=go
 GOFLAGS=-v
@@ -22,7 +22,7 @@ test-short:
 	$(GO) test -short ./internal/...
 
 clean:
-	rm -rf $(BUILD_DIR) coverage.out pulse.db
+	rm -rf $(BUILD_DIR) coverage.out anohive.db
 	@echo "Cleaned"
 
 run-server: build

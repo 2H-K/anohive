@@ -54,7 +54,7 @@ kubectl apply -k deployments/kubernetes/
 kubectl -n anohive get pods
 
 # Port forward for local access
-kubectl -n anohive port-forward svc/anohive 8080:80
+kubectl -n anohive port-forward svc/anohive 8200:80
 ```
 
 ### Directory Structure

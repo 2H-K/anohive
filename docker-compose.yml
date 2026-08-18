@@ -8,19 +8,19 @@ services:
     container_name: anohive
     restart: unless-stopped
     ports:
-      - "8080:8080"
+      - "8200:8200"
     environment:
-      - ANOIVE_DB_PATH=/var/lib/anohive/data/anohive.db
-      - ANOIVE_RETENTION_HOURS=168
-      - ANOIVE_MAX_LOGS=1000000
-      - ANOIVE_API_KEY=${ANOIVE_API_KEY:-anohive-dev-key-2024}
-      - ANOIVE_LOG_LEVEL=info
-      - ANOIVE_LOG_FORMAT=json
-      - ANOIVE_ALLOWED_ORIGINS=*
-      - ANOIVE_RATE_LIMIT=100
-      - ANOIVE_WS_MAX_CONNECTIONS=100
-      - ANOIVE_MAX_BODY_SIZE=10485760
-      - ANOIVE_CLEANUP_INTERVAL=3600
+      - ANOHIVE_DB_PATH=/var/lib/anohive/data/anohive.db
+      - ANOHIVE_RETENTION_HOURS=168
+      - ANOHIVE_MAX_LOGS=1000000
+      - ANOHIVE_API_KEY=${ANOHIVE_API_KEY:-anohive-dev-key-2024}
+      - ANOHIVE_LOG_LEVEL=info
+      - ANOHIVE_LOG_FORMAT=json
+      - ANOHIVE_ALLOWED_ORIGINS=*
+      - ANOHIVE_RATE_LIMIT=100
+      - ANOHIVE_WS_MAX_CONNECTIONS=100
+      - ANOHIVE_MAX_BODY_SIZE=10485760
+      - ANOHIVE_CLEANUP_INTERVAL=3600
     volumes:
       - anohive-data:/var/lib/anohive/data
       - ./configs:/etc/anohive:ro
@@ -58,7 +58,7 @@ services:
       - --url
       - http://anohive:8080/api/logs/raw
       - --api-key
-      - ${ANOIVE_API_KEY:-anohive-dev-key-2024}
+      - ${ANOHIVE_API_KEY:-anohive-dev-key-2024}
     volumes:
       - app-logs:/var/log/apps:ro
     networks:

@@ -136,10 +136,10 @@ anohive/ (总计 ~5000 行代码)
 cd anohive && make build
 
 # 启动服务器
-./build/pulse -port 8080
+./build/anohive -port 8200
 
 # 摄入日志
-curl -X POST http://localhost:8080/api/logs/ingest \
+curl -X POST http://localhost:8200/api/logs/ingest \
   -H "Content-Type: application/json" \
   -d '{"source": "myapp", "entries": [{"level": "ERROR", "message": "test"}]}'
 
