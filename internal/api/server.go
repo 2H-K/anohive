@@ -105,8 +105,12 @@ func (s *Server) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/v1/logs", s.corsMiddleware(s.rateLimitMiddleware(s.handleLogs)))
 	mux.HandleFunc("/api/v1/logs/ingest", s.corsMiddleware(s.authMiddleware(s.rateLimitMiddleware(s.handleIngest))))
 	mux.HandleFunc("/api/v1/logs/raw", s.corsMiddleware(s.authMiddleware(s.rateLimitMiddleware(s.handleRawIngest))))
+	mux.HandleFunc("/api/v1/logs/export", s.corsMiddleware(s.rateLimitMiddleware(s.handleExport)))
 	mux.HandleFunc("/api/v1/anomalies", s.corsMiddleware(s.rateLimitMiddleware(s.handleAnomalies)))
 	mux.HandleFunc("/api/v1/stats", s.corsMiddleware(s.rateLimitMiddleware(s.handleStats)))
+	mux.HandleFunc("/api/v1/stats/trends", s.corsMiddleware(s.rateLimitMiddleware(s.handleTrends)))
+	mux.HandleFunc("/api/v1/stats/levels", s.corsMiddleware(s.rateLimitMiddleware(s.handleLevelDistribution)))
+	mux.HandleFunc("/api/v1/stats/anomalies/timeline", s.corsMiddleware(s.rateLimitMiddleware(s.handleAnomalyTimeline)))
 	mux.HandleFunc("/api/v1/sources", s.corsMiddleware(s.rateLimitMiddleware(s.handleSources)))
 	mux.HandleFunc("/api/v1/config/thresholds", s.corsMiddleware(s.authMiddleware(s.rateLimitMiddleware(s.handleThresholds))))
 	mux.HandleFunc("/api/v1/metrics", s.corsMiddleware(s.rateLimitMiddleware(s.metrics.HandleMetrics)))
@@ -124,8 +128,12 @@ func (s *Server) RegisterRoutes(mux *http.ServeMux) {
 	mux.HandleFunc("/api/logs", s.corsMiddleware(s.rateLimitMiddleware(s.handleLogs)))
 	mux.HandleFunc("/api/logs/ingest", s.corsMiddleware(s.authMiddleware(s.rateLimitMiddleware(s.handleIngest))))
 	mux.HandleFunc("/api/logs/raw", s.corsMiddleware(s.authMiddleware(s.rateLimitMiddleware(s.handleRawIngest))))
+	mux.HandleFunc("/api/logs/export", s.corsMiddleware(s.rateLimitMiddleware(s.handleExport)))
 	mux.HandleFunc("/api/anomalies", s.corsMiddleware(s.rateLimitMiddleware(s.handleAnomalies)))
 	mux.HandleFunc("/api/stats", s.corsMiddleware(s.rateLimitMiddleware(s.handleStats)))
+	mux.HandleFunc("/api/stats/trends", s.corsMiddleware(s.rateLimitMiddleware(s.handleTrends)))
+	mux.HandleFunc("/api/stats/levels", s.corsMiddleware(s.rateLimitMiddleware(s.handleLevelDistribution)))
+	mux.HandleFunc("/api/stats/anomalies/timeline", s.corsMiddleware(s.rateLimitMiddleware(s.handleAnomalyTimeline)))
 	mux.HandleFunc("/api/sources", s.corsMiddleware(s.rateLimitMiddleware(s.handleSources)))
 	mux.HandleFunc("/api/config/thresholds", s.corsMiddleware(s.authMiddleware(s.rateLimitMiddleware(s.handleThresholds))))
 	mux.HandleFunc("/api/metrics", s.corsMiddleware(s.rateLimitMiddleware(s.metrics.HandleMetrics)))
@@ -475,6 +483,124 @@ func (s *Server) handleStats(w http.ResponseWriter, r *http.Request) {
 		TotalLogs:      totalLogs,
 		TotalAnomalies: totalAnomalies,
 		SourcesStats:   sourcesStats,
+	})
+}
+
+// handleTrends handles GET /api/v1/stats/trends - get log trends over time
+func (s *Server) handleTrends(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	hours := 24
+	if h := r.URL.Query().Get("hours"); h != "" {
+		if v, err := strconv.Atoi(h); err == nil && v > 0 {
+			hours = v
+		}
+	}
+	source := r.URL.Query().Get("source")
+
+	trends, err := s.storage.GetLogTrends(hours, source)
+	if err != nil {
+		s.logger.Error("get trends failed", "error", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"trends": trends,
+		"hours":  hours,
+	})
+}
+
+// handleLevelDistribution handles GET /api/v1/stats/levels - get level distribution
+func (s *Server) handleLevelDistribution(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	source := r.URL.Query().Get("source")
+	dist, err := s.storage.GetLevelDistribution(source)
+	if err != nil {
+		s.logger.Error("get level distribution failed", "error", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"distribution": dist,
+	})
+}
+
+// handleAnomalyTimeline handles GET /api/v1/stats/anomalies/timeline - get anomaly timeline
+func (s *Server) handleAnomalyTimeline(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	hours := 24
+	if h := r.URL.Query().Get("hours"); h != "" {
+		if v, err := strconv.Atoi(h); err == nil && v > 0 {
+			hours = v
+		}
+	}
+	source := r.URL.Query().Get("source")
+
+	timeline, err := s.storage.GetAnomalyTimeline(hours, source)
+	if err != nil {
+		s.logger.Error("get anomaly timeline failed", "error", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	respondJSON(w, http.StatusOK, map[string]interface{}{
+		"timeline": timeline,
+		"hours":    hours,
+	})
+}
+
+// handleExport handles GET /api/v1/logs/export - export logs as JSON download
+func (s *Server) handleExport(w http.ResponseWriter, r *http.Request) {
+	if r.Method != http.MethodGet {
+		http.Error(w, "Method not allowed", http.StatusMethodNotAllowed)
+		return
+	}
+
+	query := models.LogQuery{
+		Source: r.URL.Query().Get("source"),
+		Level:  models.LogLevel(r.URL.Query().Get("level")),
+		Search: r.URL.Query().Get("search"),
+		Limit:  10000,
+	}
+
+	if start := r.URL.Query().Get("start"); start != "" {
+		if t, err := time.Parse(time.RFC3339, start); err == nil {
+			query.StartTime = t
+		}
+	}
+	if end := r.URL.Query().Get("end"); end != "" {
+		if t, err := time.Parse(time.RFC3339, end); err == nil {
+			query.EndTime = t
+		}
+	}
+
+	logs, err := s.storage.QueryLogs(query)
+	if err != nil {
+		s.logger.Error("export logs failed", "error", err)
+		http.Error(w, "Internal server error", http.StatusInternalServerError)
+		return
+	}
+
+	filename := fmt.Sprintf("anohive-logs-%s.json", time.Now().Format("20060102-150405"))
+	w.Header().Set("Content-Type", "application/json")
+	w.Header().Set("Content-Disposition", fmt.Sprintf("attachment; filename=%s", filename))
+	json.NewEncoder(w).Encode(map[string]interface{}{
+		"exported_at": time.Now().UTC(),
+		"count":       len(logs),
+		"logs":        logs,
 	})
 }
 

@@ -47,3 +47,33 @@ export function ingestLog(entry) {
 export function fetchSources() {
   return request('/sources')
 }
+
+export function fetchTrends(hours = 24, source = '') {
+  const params = new URLSearchParams()
+  params.set('hours', hours)
+  if (source) params.set('source', source)
+  return request(`/stats/trends?${params}`)
+}
+
+export function fetchLevelDistribution(source = '') {
+  const params = new URLSearchParams()
+  if (source) params.set('source', source)
+  return request(`/stats/levels?${params}`)
+}
+
+export function fetchAnomalyTimeline(hours = 24, source = '') {
+  const params = new URLSearchParams()
+  params.set('hours', hours)
+  if (source) params.set('source', source)
+  return request(`/stats/anomalies/timeline?${params}`)
+}
+
+export function getExportUrl(query = {}) {
+  const params = new URLSearchParams()
+  if (query.source) params.set('source', query.source)
+  if (query.level) params.set('level', query.level)
+  if (query.search) params.set('search', query.search)
+  if (query.start) params.set('start', query.start)
+  if (query.end) params.set('end', query.end)
+  return `${BASE_URL}/api/v1/logs/export?${params}`
+}

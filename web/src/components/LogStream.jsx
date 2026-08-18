@@ -23,7 +23,7 @@ function formatTime(ts, locale) {
   }
 }
 
-function LogRow({ log, onCopy }) {
+function LogRow({ log, onCopy, onSelect }) {
   const { t } = useLanguage()
 
   const handleCopy = useCallback(() => {
@@ -32,8 +32,19 @@ function LogRow({ log, onCopy }) {
     onCopy?.()
   }, [log, onCopy])
 
+  const handleClick = useCallback(() => {
+    onSelect?.(log)
+  }, [log, onSelect])
+
   return (
-    <div className={`log-row level-${log.level?.toLowerCase()}`}>
+    <div
+      className={`log-row level-${log.level?.toLowerCase()} log-row-clickable`}
+      onClick={handleClick}
+      role="button"
+      tabIndex={0}
+      onKeyDown={(e) => { if (e.key === 'Enter' || e.key === ' ') handleClick() }}
+      aria-label={t('logDetail.title')}
+    >
       <span className="log-time">{formatTime(log.timestamp)}</span>
       <span className="log-level" style={{ backgroundColor: levelColors[log.level] || '#6c757d' }}>
         {log.level}
@@ -42,7 +53,7 @@ function LogRow({ log, onCopy }) {
       <span className="log-message" title={log.message}>{log.message}</span>
       <button
         className="log-copy-btn"
-        onClick={handleCopy}
+        onClick={(e) => { e.stopPropagation(); handleCopy() }}
         aria-label={t('logStream.copy')}
         title={t('logStream.copy')}
       >
@@ -64,7 +75,7 @@ function useDebounce(value, delay) {
   return [debouncedValue, setValue]
 }
 
-export default function LogStream({ logs, onCopyLog }) {
+export default function LogStream({ logs, onCopyLog, onSelectLog }) {
   const [levelFilter, setLevelFilter] = useState('')
   const [sourceFilter, setSourceFilter] = useState('')
   const [searchText, setSearchText] = useState('')
@@ -185,7 +196,7 @@ export default function LogStream({ logs, onCopyLog }) {
           items={filteredLogs}
           itemHeight={36}
           height={500}
-          renderItem={(log) => <LogRow log={log} onCopy={onCopyLog} />}
+          renderItem={(log) => <LogRow log={log} onCopy={onCopyLog} onSelect={onSelectLog} />}
         />
       )}
     </div>

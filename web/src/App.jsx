@@ -3,13 +3,17 @@ import LogStream from './components/LogStream'
 import StatsPanel from './components/StatsPanel'
 import AnomalyList from './components/AnomalyList'
 import SourceList from './components/SourceList'
+import TrendChart from './components/TrendChart'
+import LevelDistribution from './components/LevelDistribution'
+import AnomalyTimeline from './components/AnomalyTimeline'
+import LogDetailModal from './components/LogDetailModal'
 import LanguageToggle from './components/LanguageToggle'
 import { useWebSocket } from './hooks/useWebSocket'
 import { useTheme } from './hooks/useTheme'
 import { useLanguage } from './i18n'
 import { ToastProvider, useToast } from './components/Toast'
 import { fetchStats, fetchLogs, fetchAnomalies } from './services/api.js'
-import { AnoHiveIcon, SunIcon, MoonIcon, ListIcon, ShieldIcon, GridIcon } from './components/Icons'
+import { AnoHiveIcon, SunIcon, MoonIcon, ListIcon, ShieldIcon, GridIcon, ChartIcon } from './components/Icons'
 
 function ThemeToggle() {
   const { theme, toggleTheme } = useTheme()
@@ -33,6 +37,7 @@ function AppContent() {
   const [activeTab, setActiveTab] = useState('logs')
   const [wsConnected, setWsConnected] = useState(false)
   const [statsLoading, setStatsLoading] = useState(true)
+  const [selectedLog, setSelectedLog] = useState(null)
   const { addToast } = useToast()
   const { t } = useLanguage()
   const reconnectNotified = useRef(false)
@@ -101,6 +106,7 @@ function AppContent() {
 
   const tabs = [
     { id: 'logs', label: t('app.tabs.logs'), icon: ListIcon },
+    { id: 'analytics', label: t('app.tabs.analytics'), icon: ChartIcon },
     { id: 'anomalies', label: t('app.tabs.anomalies'), icon: ShieldIcon },
     { id: 'sources', label: t('app.tabs.sources'), icon: GridIcon },
   ]
@@ -154,10 +160,23 @@ function AppContent() {
       </nav>
 
       <main id="main-content" className="content" role="tabpanel" aria-labelledby={`tab-${activeTab}`}>
-        {activeTab === 'logs' && <LogStream logs={logs} onCopyLog={handleCopyLog} />}
+        {activeTab === 'logs' && <LogStream logs={logs} onCopyLog={handleCopyLog} onSelectLog={setSelectedLog} />}
+        {activeTab === 'analytics' && (
+          <div className="analytics-panel">
+            <TrendChart height={180} />
+            <div className="analytics-row">
+              <LevelDistribution />
+              <AnomalyTimeline height={120} />
+            </div>
+          </div>
+        )}
         {activeTab === 'anomalies' && <AnomalyList anomalies={anomalies} />}
         {activeTab === 'sources' && <SourceList sourcesStats={stats?.sources_stats || []} />}
       </main>
+
+      {selectedLog && (
+        <LogDetailModal log={selectedLog} onClose={() => setSelectedLog(null)} />
+      )}
     </div>
   )
 }

@@ -473,6 +473,86 @@ func (s *SQLiteStore) Backup(backupPath string) error {
 	return err
 }
 
+// GetLogTrends returns log count grouped by time intervals
+func (s *SQLiteStore) GetLogTrends(hours int, source string) ([]map[string]interface{}, error) {
+	where := "timestamp >= datetime('now', ?)"
+	args := []interface{}{fmt.Sprintf("-%d hours", hours)}
+	if source != "" {
+		where += " AND source = ?"
+		args = append(args, source)
+	}
+
+	q := fmt.Sprintf(`
+		SELECT strftime('%%Y-%%m-%%d %%H:00:00', timestamp) as hour,
+		       COUNT(*) as count
+		FROM logs
+		WHERE %s
+		GROUP BY hour
+		ORDER BY hour ASC
+	`, where)
+
+	rows, err := s.db.Query(q, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var results []map[string]interface{}
+	for rows.Next() {
+		var hour string
+		var count int64
+		if err := rows.Scan(&hour, &count); err != nil {
+			return nil, err
+		}
+		results = append(results, map[string]interface{}{
+			"time":  hour,
+			"count": count,
+		})
+	}
+	return results, rows.Err()
+}
+
+// GetAnomalyTimeline returns anomalies grouped by hour
+func (s *SQLiteStore) GetAnomalyTimeline(hours int, source string) ([]map[string]interface{}, error) {
+	where := "timestamp >= datetime('now', ?)"
+	args := []interface{}{fmt.Sprintf("-%d hours", hours)}
+	if source != "" {
+		where += " AND source = ?"
+		args = append(args, source)
+	}
+
+	q := fmt.Sprintf(`
+		SELECT strftime('%%Y-%%m-%%d %%H:00:00', timestamp) as hour,
+		       severity,
+		       COUNT(*) as count
+		FROM anomalies
+		WHERE %s
+		GROUP BY hour, severity
+		ORDER BY hour ASC
+	`, where)
+
+	rows, err := s.db.Query(q, args...)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+
+	var results []map[string]interface{}
+	for rows.Next() {
+		var hour, severity string
+		var count int64
+		if err := rows.Scan(&hour, &severity, &count); err != nil {
+			return nil, err
+		}
+		results = append(results, map[string]interface{}{
+			"time":     hour,
+			"severity": severity,
+			"count":    count,
+		})
+	}
+	return results, rows.Err()
+}
+
 // Stats returns database statistics
 func (s *SQLiteStore) Stats() (map[string]interface{}, error) {
 	var pageCount, pageSize, freePages int

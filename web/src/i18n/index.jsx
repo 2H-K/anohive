@@ -11,6 +11,7 @@ const translations = {
     'app.connection.restored': 'Connection restored',
     'app.connection.error': 'WebSocket connection error',
     'app.tabs.logs': 'Log Stream',
+    'app.tabs.analytics': 'Analytics',
     'app.tabs.anomalies': 'Anomalies',
     'app.tabs.sources': 'Sources',
     'app.theme.toLight': 'Switch to light mode',
@@ -88,6 +89,29 @@ const translations = {
     // API
     'api.error': 'API error: {status}',
     'api.wsError': 'WebSocket error',
+
+    // Charts
+    'charts.logTrend': 'Log Trend',
+    'charts.levelDistribution': 'Level Distribution',
+    'charts.anomalyTimeline': 'Anomaly Timeline',
+    'charts.timeRange': 'Time range',
+    'charts.last1h': 'Last 1 hour',
+    'charts.last6h': 'Last 6 hours',
+    'charts.last24h': 'Last 24 hours',
+    'charts.last3d': 'Last 3 days',
+    'charts.logs': 'logs',
+    'charts.noData': 'No trend data available',
+    'charts.noAnomalies': 'No anomalies in period',
+
+    // Log Detail
+    'logDetail.title': 'Log Detail',
+    'logDetail.source': 'Source',
+    'logDetail.host': 'Host',
+    'logDetail.service': 'Service',
+    'logDetail.id': 'ID',
+    'logDetail.fields': 'Fields',
+    'logDetail.raw': 'Raw Log',
+    'logDetail.json': 'Full JSON',
   },
   zh: {
     // App
@@ -99,6 +123,7 @@ const translations = {
     'app.connection.restored': '连接已恢复',
     'app.connection.error': 'WebSocket 连接错误',
     'app.tabs.logs': '日志流',
+    'app.tabs.analytics': '分析',
     'app.tabs.anomalies': '异常',
     'app.tabs.sources': '数据源',
     'app.theme.toLight': '切换到浅色模式',
@@ -176,6 +201,29 @@ const translations = {
     // API
     'api.error': 'API 错误: {status}',
     'api.wsError': 'WebSocket 错误',
+
+    // Charts
+    'charts.logTrend': '日志趋势',
+    'charts.levelDistribution': '级别分布',
+    'charts.anomalyTimeline': '异常时间线',
+    'charts.timeRange': '时间范围',
+    'charts.last1h': '最近 1 小时',
+    'charts.last6h': '最近 6 小时',
+    'charts.last24h': '最近 24 小时',
+    'charts.last3d': '最近 3 天',
+    'charts.logs': '条日志',
+    'charts.noData': '暂无趋势数据',
+    'charts.noAnomalies': '该时段无异常',
+
+    // Log Detail
+    'logDetail.title': '日志详情',
+    'logDetail.source': '来源',
+    'logDetail.host': '主机',
+    'logDetail.service': '服务',
+    'logDetail.id': 'ID',
+    'logDetail.fields': '扩展字段',
+    'logDetail.raw': '原始日志',
+    'logDetail.json': '完整 JSON',
   },
 };
 
